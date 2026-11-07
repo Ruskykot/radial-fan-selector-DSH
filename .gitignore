@@ -32,3 +32,7 @@ mcp.json
 
 # npm pack артефакты
 *.tgz
+
+# npm publish: временные конфиг с токеном и локальный кэш
+.npmrc.publish
+.npm-cache/
