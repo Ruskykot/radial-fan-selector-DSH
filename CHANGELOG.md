@@ -6,7 +6,7 @@
 
 ### Added
 - npm-канал распространения: Python-ядро и справочники поставляются **внутри**
-  пакета `@ruskykot/fan-selector` (`fan-selector-plugin/core/`), поэтому после
+  пакета `@rusky_kot/fan-selector` (`fan-selector-plugin/core/`), поэтому после
   установки плагина в профиль DSH `pip install` ядра не требуется.
 - `engines.dsh` (`>=0.2.0-0`) в пакете плагина — DSH проверяет совместимость при
   установке; в пакет добавлены `LICENSE` и `README.md` для страницы npm.
@@ -20,6 +20,9 @@
 - Раскладка: ядро перенесено в `fan-selector-plugin/core/select-radial-fan/`,
   раннер — в `fan-selector-plugin/core/run_once.py` (сознательно рядом с ядром,
   чтобы работал штатный фолбэк раннера).
+- Пакет плагина переименован `@ruskykot/fan-selector` → `@rusky_kot/fan-selector`
+  (личный scope npm-аккаунта `rusky_kot`; org `ruskykot` в npm не создавался).
+  Обновлены `package.json`, `cordis.patch.yml`, `client.js` и все команды установки.
 - `index.js`: пути вычисляются от каталога плагина (`CORE_DIR`), `cwd` спавна —
   каталог плагина; старый `PROJECT_ROOT` удалён.
 - `config.py`: путь к `config.json` строится относительно пакета

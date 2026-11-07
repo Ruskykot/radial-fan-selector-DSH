@@ -1,5 +1,5 @@
 window.__ModuleLoader__.load({
-  id: '@ruskykot/fan-selector',
+  id: '@rusky_kot/fan-selector',
   factory(require) {
     const React = require('react');
     const h = React.createElement;

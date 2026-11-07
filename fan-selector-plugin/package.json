@@ -1,5 +1,5 @@
 {
-  "name": "@ruskykot/fan-selector",
+  "name": "@rusky_kot/fan-selector",
   "version": "1.0.0",
   "description": "DSH-плагин подбора радиальных вентиляторов ВР 86-77 и ВР 280-46 по расходу и давлению.",
   "license": "Apache-2.0",

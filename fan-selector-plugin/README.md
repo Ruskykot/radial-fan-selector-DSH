@@ -14,10 +14,10 @@ pip install numpy pillow
 ```
 
 Затем добавьте плагин в профиль DSH — через интерфейс (**Профили → установка
-плагина → `@ruskykot/fan-selector`**) или командой:
+плагина → `@rusky_kot/fan-selector`**) или командой:
 
 ```bash
-dsh plugin --profile <профиль> add @ruskykot/fan-selector
+dsh plugin --profile <профиль> add @rusky_kot/fan-selector
 ```
 
 Перезапустите DSH: появится панель «Подбор вентилятора», инструмент агента

@@ -74,11 +74,11 @@ pip install numpy pillow
 
 ### 2. Установить плагин в профиль DSH
 
-Через интерфейс DSH (**Профили → установка плагина → `@ruskykot/fan-selector`**)
+Через интерфейс DSH (**Профили → установка плагина → `@rusky_kot/fan-selector`**)
 или официальной CLI-командой:
 
 ```bash
-dsh plugin --profile <профиль> add @ruskykot/fan-selector
+dsh plugin --profile <профиль> add @rusky_kot/fan-selector
 ```
 
 > Если команда `dsh` не найдена в `PATH`, добавьте её (настройки DSH → установка
@@ -86,15 +86,15 @@ dsh plugin --profile <профиль> add @ruskykot/fan-selector
 > `<DSH>/resources/runtime/cli/bin/dsh.cmd`.
 
 Команда добавляет зависимость в `~/.dsh/profiles/<профиль>/package.json` и
-выполняет `pnpm install`. Убедитесь, что бандл `@ruskykot/fan-selector` указан в
+выполняет `pnpm install`. Убедитесь, что бандл `@rusky_kot/fan-selector` указан в
 `dsh.profile.bundles` — DSH загружает только перечисленные бандлы:
 
 ```jsonc
 {
   "dependencies": {
-    "@ruskykot/fan-selector": "^1.0.0"
+    "@rusky_kot/fan-selector": "^1.0.0"
   },
-  "dsh": { "profile": { "bundles": ["@ruskykot/fan-selector"] } }
+  "dsh": { "profile": { "bundles": ["@rusky_kot/fan-selector"] } }
 }
 ```
 

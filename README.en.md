@@ -74,11 +74,11 @@ machine. If `python` is not in `PATH`, point to it with `FAN_SELECTOR_PYTHON`.
 
 ### 2. Add the plugin to the DSH profile
 
-Through the DSH UI (**Profiles → install plugin → `@ruskykot/fan-selector`**) or
+Through the DSH UI (**Profiles → install plugin → `@rusky_kot/fan-selector`**) or
 with the official CLI command:
 
 ```bash
-dsh plugin --profile <profile> add @ruskykot/fan-selector
+dsh plugin --profile <profile> add @rusky_kot/fan-selector
 ```
 
 > If the `dsh` command is not found, add it to `PATH` (DSH settings → install
@@ -86,15 +86,15 @@ dsh plugin --profile <profile> add @ruskykot/fan-selector
 > `<DSH>/resources/runtime/cli/bin/dsh.cmd`.
 
 The command adds the dependency to `~/.dsh/profiles/<profile>/package.json` and
-runs `pnpm install`. Make sure the bundle `@ruskykot/fan-selector` is listed in
+runs `pnpm install`. Make sure the bundle `@rusky_kot/fan-selector` is listed in
 `dsh.profile.bundles` — DSH loads only the bundles listed there:
 
 ```jsonc
 {
   "dependencies": {
-    "@ruskykot/fan-selector": "^1.0.0"
+    "@rusky_kot/fan-selector": "^1.0.0"
   },
-  "dsh": { "profile": { "bundles": ["@ruskykot/fan-selector"] } }
+  "dsh": { "profile": { "bundles": ["@rusky_kot/fan-selector"] } }
 }
 ```
 

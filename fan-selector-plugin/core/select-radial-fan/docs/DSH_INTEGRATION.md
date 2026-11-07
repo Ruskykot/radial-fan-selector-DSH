@@ -25,11 +25,11 @@ React-панель «Подбор вентилятора» в интерфейс
    ```jsonc
    {
      "dependencies": {
-       "@ruskykot/fan-selector": "link:<путь_к_репозиторию>/fan-selector-plugin"
+       "@rusky_kot/fan-selector": "link:<путь_к_репозиторию>/fan-selector-plugin"
      },
      "dsh": {
        "profile": {
-         "bundles": ["@ruskykot/fan-selector"]
+         "bundles": ["@rusky_kot/fan-selector"]
        }
      }
    }
