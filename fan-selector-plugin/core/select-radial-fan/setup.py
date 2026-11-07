@@ -6,7 +6,7 @@
 поэтому на этапе сборки JSON-файлы копируются в ``fan_selector/data/`` внутри
 ``build_lib`` и попадают в установленный пакет.
 
-Запускается автоматически: ``pip install ./select-radial-fan``, ``pip wheel .``,
+Запускается автоматически: ``pip install ./fan-selector-plugin/core/select-radial-fan``, ``pip wheel .``,
 ``python -m build``. Для sdist файлы включает ``MANIFEST.in``.
 """
 

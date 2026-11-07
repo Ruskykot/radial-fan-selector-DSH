@@ -8,14 +8,14 @@ React-панель «Подбор вентилятора» в интерфейс
 ## Структура
 
 - `fan-selector-plugin/` — DSH-бандл (хост `index.js` + клиент `client.js`).
-- `select-radial-fan/` — Python-ядро (`fan_selector`) + `data/` + MCP/REST-адаптеры.
+- `fan-selector-plugin/core/select-radial-fan/` — Python-ядро (`fan_selector`) + `data/` + MCP/REST-адаптеры.
 - `.dsh/skills/fan-selector/SKILL.md` — навык для агента.
 
 ## Требования
 
 - DeepSeek Harness (DSH);
 - Node ≥ 20 + pnpm;
-- Python ≥ 3.11 с `numpy` и `Pillow` (ядро ставится как пакет: `pip install ./select-radial-fan`).
+- Python ≥ 3.11 с `numpy` и `Pillow` (ядро ставится как пакет: `pip install ./fan-selector-plugin/core/select-radial-fan`).
 
 ## Подключение плагина
 
@@ -50,7 +50,7 @@ React-панель «Подбор вентилятора» в интерфейс
 Ядро умеет работать как MCP-сервер (stdio / streamable-http), конфиг — `mcp.example.json`:
 
 ```bash
-cd select-radial-fan
+cd fan-selector-plugin/core/select-radial-fan
 python mcp_stdio.py                # stdio
 python mcp_stdio.py streamable-http  # http://127.0.0.1:8000/mcp
 ```

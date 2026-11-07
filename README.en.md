@@ -44,43 +44,46 @@ calculation runs in a separate Python core `fan_selector` (JSON in → JSON out)
 
 | Path | Purpose |
 |---|---|
-| `fan-selector-plugin/` | DSH bundle: host `index.js` + client `client.js` (+ `locale`, `cordis.patch.yml`) |
+| `fan-selector-plugin/` | DSH bundle: host `index.js` + client `client.js` (+ `locale`, `cordis.patch.yml`, `core/`) |
+| `fan-selector-plugin/core/` | calculation core inside the package: `run_once.py` + `select-radial-fan/` |
 | `fan-selector-plugin/core/select-radial-fan/` | Python core `fan_selector`, `data/` references, MCP/REST adapters, React UI `web/` |
 | `.dsh/skills/fan-selector/SKILL.md` | agent skill for DSH |
-| `run_once.py` | one-shot JSON-in / JSON-out core runner (used by the plugin) |
 | `run-rest.py` | optional REST fallback of the core on a separate port |
 | `LICENSE` | Apache-2.0 |
 
 ## Requirements
 
-- DeepSeek Harness (DSH);
-- Node ≥ 20 + pnpm;
-- Python ≥ 3.11 with `numpy` and `Pillow` (the core is installed as a regular
-  package; dependencies are resolved automatically).
+- DeepSeek Harness (DSH) `>= 0.2.0`;
+- Python ≥ 3.11 with `numpy` and `Pillow` (required for calculations);
+- for development: Node ≥ 20 + pnpm.
 
-## Installation
+## Installation (users)
 
-The simplest and preferred way is to **add the plugin to the DSH profile**: the
-REST API, selection panel, agent tool and skill all come with it. Only the
-Python core is installed separately.
+The plugin is installed as a **regular DSH package** — there is no need to clone
+the repository or to install the core via `pip`: the Python core and the
+reference data already ship inside the package.
 
-### 1. Install the calculation core
+### 1. Install Python 3.11+ and the libraries
 
 ```bash
-pip install ./fan-selector-plugin/core/select-radial-fan
+pip install numpy pillow
 ```
 
+Calculations run in a local Python process, so an interpreter is required on the
+machine. If `python` is not in `PATH`, point to it with `FAN_SELECTOR_PYTHON`.
+
 ### 2. Add the plugin to the DSH profile
+
+Through the DSH UI (**Profiles → install plugin → `@ruskykot/fan-selector`**) or
+with the official CLI command:
+
+```bash
+dsh plugin --profile <profile> add @ruskykot/fan-selector
+```
 
 > If the `dsh` command is not found, add it to `PATH` (DSH settings → install
 > command line) or call the full path
 > `<DSH>/resources/runtime/cli/bin/dsh.cmd`.
-
-Use the DSH plugin manager, or the official CLI command:
-
-```bash
-dsh plugin --profile <profile> add "link:<repo_path>/fan-selector-plugin"
-```
 
 The command adds the dependency to `~/.dsh/profiles/<profile>/package.json` and
 runs `pnpm install`. Make sure the bundle `@ruskykot/fan-selector` is listed in
@@ -89,7 +92,7 @@ runs `pnpm install`. Make sure the bundle `@ruskykot/fan-selector` is listed in
 ```jsonc
 {
   "dependencies": {
-    "@ruskykot/fan-selector": "link:<repo_path>/fan-selector-plugin"
+    "@ruskykot/fan-selector": "^1.0.0"
   },
   "dsh": { "profile": { "bundles": ["@ruskykot/fan-selector"] } }
 }
@@ -100,8 +103,40 @@ runs `pnpm install`. Make sure the bundle `@ruskykot/fan-selector` is listed in
 After the restart the “Fan selection” panel appears, and the agent gets the
 `fan_selector_history` tool and the `fan-selector` skill.
 
-> For an npm publish, replace `link:` with the package version:
-> `dsh plugin --profile <profile> add @ruskykot/fan-selector`.
+If Python or the libraries are missing, the panel shows a clear error with the
+install command, and the API returns the `ENV` code.
+
+## Development
+
+```bash
+git clone https://github.com/Ruskykot/radial-fan-selector-DSH.git
+cd radial-fan-selector-DSH
+
+# core as a regular package (or pip install -e ...)
+pip install ./fan-selector-plugin/core/select-radial-fan
+
+# link the local plugin checkout into the DSH profile
+dsh plugin --profile <profile> add "link:<repo_path>/fan-selector-plugin"
+```
+
+Development requirements: Node ≥ 20 + pnpm (for building `web/`), Python 3.11+.
+
+Core and adapter tests:
+
+```bash
+cd fan-selector-plugin/core/select-radial-fan
+pip install -r requirements.txt -r requirements-mcp.txt
+python tests/test_golden.py
+python tests/test_golden_fixture.py
+python tests/test_mcp.py
+python tests/test_mcp_registration.py
+python tests/test_rest.py
+```
+
+- UI (optional standalone React widget, not used by the plugin):
+  `cd web && pnpm install && pnpm dev` (build check — `pnpm build`).
+- MCP server: `python mcp_stdio.py streamable-http`.
+- REST fallback: `python run-rest.py 8100`.
 
 ## Plugin behaviour
 
@@ -285,27 +320,10 @@ of the calculation result breaks the test.
 
 | Variable | Purpose | Default |
 |---|---|---|
-| `FAN_SELECTOR_RUNNER` | path to `run_once.py` | `<repo>/run_once.py` |
-| `FAN_SELECTOR_PYTHON` | Python interpreter (with `numpy`) | `python` / `python3` |
-| `FAN_SELECTOR_CORE` | path to the `fan_selector` package | `<repo>/fan-selector-plugin/core/select-radial-fan` |
+| `FAN_SELECTOR_RUNNER` | path to `run_once.py` | `<plugin>/core/run_once.py` |
+| `FAN_SELECTOR_PYTHON` | Python interpreter (with `numpy` and `Pillow`) | `python` / `python3` |
+| `FAN_SELECTOR_CORE` | path to the `fan_selector` package | `<plugin>/core/select-radial-fan` |
 | `FAN_SELECTOR_HISTORY` | selection history file | `~/.fan-selector-history.json` |
-
-## Development & tests
-
-```bash
-cd fan-selector-plugin/core/select-radial-fan
-pip install -r requirements.txt -r requirements-mcp.txt
-python tests/test_golden.py
-python tests/test_golden_fixture.py
-python tests/test_mcp.py
-python tests/test_mcp_registration.py
-python tests/test_rest.py
-```
-
-- UI (optional standalone React widget, not used by the plugin):
-  `cd web && pnpm install && pnpm dev` (build check — `pnpm build`).
-- MCP server: `python mcp_stdio.py streamable-http`.
-- REST fallback: `python run-rest.py 8100`.
 
 ## Contributing
 

@@ -44,43 +44,46 @@ React-панель «Подбор вентилятора». Расчёт вып�
 
 | Каталог/файл | Назначение |
 |---|---|
-| `fan-selector-plugin/` | DSH-бандл: хост `index.js` + клиент `client.js` (+ `locale`, `cordis.patch.yml`) |
+| `fan-selector-plugin/` | DSH-бандл: хост `index.js` + клиент `client.js` (+ `locale`, `cordis.patch.yml`, `core/`) |
+| `fan-selector-plugin/core/` | расчётное ядро внутри пакета: `run_once.py` + `select-radial-fan/` |
 | `fan-selector-plugin/core/select-radial-fan/` | Python-ядро `fan_selector`, справочники `data/`, MCP/REST-адаптеры, React-UI `web/` |
 | `.dsh/skills/fan-selector/SKILL.md` | навык для агента DSH |
-| `run_once.py` | одноразовый JSON-in/JSON-out раннер ядра (вызывает плагин) |
 | `run-rest.py` | REST-фолбэк ядра на отдельном порту (опционально) |
 | `LICENSE` | Apache-2.0 |
 
 ## Требования
 
-- DeepSeek Harness (DSH);
-- Node ≥ 20 + pnpm;
-- Python ≥ 3.11 с `numpy` и `Pillow` (ядро ставится как обычный пакет, зависимости
-  подтягиваются автоматически).
+- DeepSeek Harness (DSH) `>= 0.2.0`;
+- Python ≥ 3.11 с `numpy` и `Pillow` (обязательно для расчёта);
+- для разработки: Node ≥ 20 + pnpm.
 
-## Установка
+## Установка (пользователям)
 
-Самый простой и предпочтительный способ — **добавить плагин в профиль DSH**:
-вместе с ним подключаются REST-API, панель подбора, инструмент агента и навык.
-Отдельно ставится только Python-ядро.
+Плагин ставится как **обычный пакет DSH** — клонировать репозиторий и
+устанавливать ядро через `pip` не нужно: Python-ядро и справочники уже внутри
+пакета.
 
-### 1. Поставить расчётное ядро
+### 1. Поставить Python 3.11+ и библиотеки
 
 ```bash
-pip install ./fan-selector-plugin/core/select-radial-fan
+pip install numpy pillow
 ```
 
-### 2. Добавить плагин в профиль DSH
+Расчёт выполняет локальный Python-процесс, поэтому интерпретатор нужен на машине.
+Если `python` не в `PATH`, укажите его переменной `FAN_SELECTOR_PYTHON`.
+
+### 2. Установить плагин в профиль DSH
+
+Через интерфейс DSH (**Профили → установка плагина → `@ruskykot/fan-selector`**)
+или официальной CLI-командой:
+
+```bash
+dsh plugin --profile <профиль> add @ruskykot/fan-selector
+```
 
 > Если команда `dsh` не найдена в `PATH`, добавьте её (настройки DSH → установка
 > командной строки) или вызывайте полный путь
 > `<DSH>/resources/runtime/cli/bin/dsh.cmd`.
-
-Через плагин-менеджер DSH или официальной CLI-командой:
-
-```bash
-dsh plugin --profile <профиль> add "link:<путь_к_репозиторию>/fan-selector-plugin"
-```
 
 Команда добавляет зависимость в `~/.dsh/profiles/<профиль>/package.json` и
 выполняет `pnpm install`. Убедитесь, что бандл `@ruskykot/fan-selector` указан в
@@ -89,7 +92,7 @@ dsh plugin --profile <профиль> add "link:<путь_к_репозитор�
 ```jsonc
 {
   "dependencies": {
-    "@ruskykot/fan-selector": "link:<путь_к_репозиторию>/fan-selector-plugin"
+    "@ruskykot/fan-selector": "^1.0.0"
   },
   "dsh": { "profile": { "bundles": ["@ruskykot/fan-selector"] } }
 }
@@ -100,8 +103,40 @@ dsh plugin --profile <профиль> add "link:<путь_к_репозитор�
 После перезапуска появится панель «Подбор вентилятора», а у агента — инструмент
 `fan_selector_history` и навык `fan-selector`.
 
-> Для публикации в npm вместо `link:` укажите версию пакета:
-> `dsh plugin --profile <профиль> add @ruskykot/fan-selector`.
+Если Python или библиотеки не найдены, панель покажет понятную ошибку с
+командой установки, а API вернёт код `ENV`.
+
+## Разработка
+
+```bash
+git clone https://github.com/Ruskykot/radial-fan-selector-DSH.git
+cd radial-fan-selector-DSH
+
+# ядро как обычный пакет (или pip install -e ...)
+pip install ./fan-selector-plugin/core/select-radial-fan
+
+# подключить локальный чекаут плагина в профиль DSH
+dsh plugin --profile <профиль> add "link:<путь_к_репозиторию>/fan-selector-plugin"
+```
+
+Требования для разработки: Node ≥ 20 + pnpm (для сборки `web/`), Python 3.11+.
+
+Тесты расчётного ядра и адаптеров:
+
+```bash
+cd fan-selector-plugin/core/select-radial-fan
+pip install -r requirements.txt -r requirements-mcp.txt
+python tests/test_golden.py
+python tests/test_golden_fixture.py
+python tests/test_mcp.py
+python tests/test_mcp_registration.py
+python tests/test_rest.py
+```
+
+- UI (опциональный самостоятельный React-виджет, плагином не используется):
+  `cd web && pnpm install && pnpm dev` (проверка сборки — `pnpm build`).
+- MCP-сервер: `python mcp_stdio.py streamable-http`.
+- REST-фолбэк: `python run-rest.py 8100`.
 
 ## Логика работы плагина
 
@@ -287,27 +322,10 @@ fan_selector/
 
 | Переменная | Назначение | По умолчанию |
 |---|---|---|
-| `FAN_SELECTOR_RUNNER` | путь к `run_once.py` | `<репозиторий>/run_once.py` |
-| `FAN_SELECTOR_PYTHON` | интерпретатор Python (с `numpy`) | `python` / `python3` |
-| `FAN_SELECTOR_CORE` | путь к пакету `fan_selector` | `<репозиторий>/fan-selector-plugin/core/select-radial-fan` |
+| `FAN_SELECTOR_RUNNER` | путь к `run_once.py` | `<плагин>/core/run_once.py` |
+| `FAN_SELECTOR_PYTHON` | интерпретатор Python (с `numpy` и `Pillow`) | `python` / `python3` |
+| `FAN_SELECTOR_CORE` | путь к пакету `fan_selector` | `<плагин>/core/select-radial-fan` |
 | `FAN_SELECTOR_HISTORY` | файл истории подборов | `~/.fan-selector-history.json` |
-
-## Разработка и тесты
-
-```bash
-cd fan-selector-plugin/core/select-radial-fan
-pip install -r requirements.txt -r requirements-mcp.txt
-python tests/test_golden.py
-python tests/test_golden_fixture.py
-python tests/test_mcp.py
-python tests/test_mcp_registration.py
-python tests/test_rest.py
-```
-
-- UI (опциональный самостоятельный React-виджет, плагином не используется):
-  `cd web && pnpm install && pnpm dev` (проверка сборки — `pnpm build`).
-- MCP-сервер: `python mcp_stdio.py streamable-http`.
-- REST-фолбэк: `python run-rest.py 8100`.
 
 ## Участие
 
