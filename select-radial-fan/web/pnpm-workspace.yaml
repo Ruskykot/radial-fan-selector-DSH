@@ -1,0 +1,10 @@
+# Настройки pnpm (pnpm >= 10/11 читает их из pnpm-workspace.yaml, а не из package.json).
+# esbuild использует postinstall для проверки/установки платформенного бинарника —
+# без разрешения установка падает с ERR_PNPM_IGNORED_BUILDS.
+#
+# allowBuilds — формат pnpm 11+ (карта «пакет: разрешено»);
+# onlyBuiltDependencies — формат pnpm 9–10 (список), оставлен для совместимости.
+allowBuilds:
+  esbuild: true
+onlyBuiltDependencies:
+  - esbuild
