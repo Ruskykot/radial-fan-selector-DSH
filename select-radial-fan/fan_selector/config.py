@@ -8,8 +8,9 @@
 - Пути к данным (с поддержкой переменных окружения)
 
 Конфигурация загружается из внешнего JSON-файла data/config.json.
-При отсутствии файла, неполных данных или некорректных значениях
-приложение не запускается (fail-fast).
+При отсутствии файла используются значения по умолчанию (с предупреждением);
+при неполных данных или некорректных значениях приложение не запускается
+(fail-fast).
 
 ================================================================
 ОГЛАВЛЕНИЕ (для chunked reading — ищите символ через gh_search)
@@ -25,8 +26,10 @@
 ЗАГРУЗКА ИЗ JSON              |                      |
   └─ Константы                | REQUIRED_FIELDS      | Обязательные поля config.json
   └─ Константы                | VALIDATION_FIELDS    | Поля секции validation
+  └─ Значения по умолчанию    | _DEFAULT_CONFIG      | Дефолты без config.json
+  └─ _default_config_path()   | _default_config_path | Путь рядом с пакетом
   └─ _resolve_config_path()   | _resolve_config_path | Путь к файлу (env > default)
-  └─ _load_config_json()      | _load_config_json    | Чтение и парсинг JSON
+  └─ _load_config_json()      | _load_config_json    | Чтение JSON (или дефолты)
   └─ _check_type()            | _check_type          | Проверка типа поля
   └─ _validate_config()       | _validate_config     | Полная валидация данных
   └─ _parse_safety_table()    | _parse_safety_table  | Парсинг таблицы запасов
@@ -42,9 +45,12 @@
 """
 from __future__ import annotations
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Tuple
+import copy
 import json
 import os
+import warnings
 
 
 # =========================================================
@@ -179,21 +185,80 @@ VALIDATION_FIELDS = [
     "t_air_min", "t_air_max",
 ]
 
+# Значения по умолчанию: используются, если data/config.json отсутствует.
+# Должны совпадать с поставляемым файлом data/config.json и полностью
+# проходить _validate_config().
+_DEFAULT_CONFIG = {
+    "rho_air": 1.2,
+    "poly_degree": 6,
+    "min_points_for_degree": 7,
+    "default_d_reg_max_pa": 1500.0,
+    "default_q_display": 7500.0,
+    "top_n": 10,
+    "pdf_output_dir": "pdfs",
+    "validation": {
+        "q_min": 100.0,
+        "q_max": 100000.0,
+        "p_min": 10.0,
+        "p_max": 10000.0,
+        "t_air_min": -50.0,
+        "t_air_max": 200.0,
+    },
+    "safety_table": [
+        {"max_power_kw": 0.5, "factor": 1.50},
+        {"max_power_kw": 1.0, "factor": 1.30},
+        {"max_power_kw": 2.0, "factor": 1.20},
+        {"max_power_kw": 5.0, "factor": 1.15},
+        {"max_power_kw": None, "factor": 1.10},
+    ],
+    "vfd": {
+        "f_nom_hz": 50.0,
+        "f_min_hz_default": 20.0,
+        "f_max_hz_default": 60.0,
+        "eta_vfd": 0.97,
+        "eta_motor_part_load": 0.85,
+    },
+}
+
+
+def _default_config_path() -> str:
+    """Путь к config.json по умолчанию — относительно кода пакета.
+
+    Работает одинаково из репозитория, из установленного wheel и из раскладки
+    плагина DSH: ``data/`` лежит рядом с каталогом ``fan_selector/``.
+    """
+    return str(Path(__file__).resolve().parents[1] / "data" / "config.json")
+
 
 def _resolve_config_path() -> str:
     """Определяет путь к файлу конфигурации.
 
     Приоритет:
     1. Переменная окружения FAN_CONFIG_PATH
-    2. Путь по умолчанию: data/config.json (с учётом PyInstaller)
+    2. Путь PyInstaller (_MEIPASS), если файл там действительно есть
+    3. Путь по умолчанию рядом с пакетом (data/config.json)
+
+    Возвращает первый существующий путь; если не существует ни один —
+    путь по умолчанию (чтобы сообщение об ошибке было осмысленным).
     """
     env_path = os.environ.get("FAN_CONFIG_PATH")
     if env_path:
         return env_path
 
+    candidates = []
+
     # Для PyInstaller: _MEIPASS — временная папка распаковки
-    base = getattr(os.sys, '_MEIPASS', os.path.dirname(os.path.dirname(__file__)))
-    return os.path.join(base, "data", "config.json")
+    meipass = getattr(os.sys, "_MEIPASS", None)
+    if meipass:
+        candidates.append(os.path.join(meipass, "data", "config.json"))
+
+    default_path = _default_config_path()
+    candidates.append(default_path)
+
+    for candidate in candidates:
+        if os.path.exists(candidate):
+            return candidate
+    return default_path
 
 
 def _load_config_json(path: str) -> dict:
@@ -203,17 +268,19 @@ def _load_config_json(path: str) -> dict:
         path: Путь к файлу config.json
 
     Returns:
-        Распарсенный словарь с данными конфигурации
+        Распарсенный словарь с данными конфигурации. Если файла нет —
+        значения по умолчанию (_DEFAULT_CONFIG) и предупреждение.
 
     Raises:
-        ConfigError: Если файл не найден или содержит невалидный JSON
+        ConfigError: Если файл существует, но содержит невалидный JSON
     """
     if not os.path.exists(path):
-        raise ConfigError(
-            f"Файл конфигурации не найден: {path}\n"
-            f"Создайте файл config.json в папке data/ "
-            f"или укажите путь через переменную окружения FAN_CONFIG_PATH."
+        warnings.warn(
+            f"Файл конфигурации не найден: {path}. "
+            f"Используются значения по умолчанию.",
+            stacklevel=2,
         )
+        return copy.deepcopy(_DEFAULT_CONFIG)
 
     try:
         with open(path, encoding="utf-8-sig") as f:
