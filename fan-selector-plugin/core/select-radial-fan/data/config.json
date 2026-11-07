@@ -5,14 +5,11 @@
     "default_d_reg_max_pa": 1500.0,
     "default_q_display": 7500.0,
     "top_n": 10,
-    "pdf_output_dir": "pdfs",
     "validation": {
         "q_min": 100.0,
         "q_max": 100000.0,
         "p_min": 10.0,
-        "p_max": 10000.0,
-        "t_air_min": -50.0,
-        "t_air_max": 200.0
+        "p_max": 10000.0
     },
     "safety_table": [
         { "max_power_kw": 0.5,  "factor": 1.50 },

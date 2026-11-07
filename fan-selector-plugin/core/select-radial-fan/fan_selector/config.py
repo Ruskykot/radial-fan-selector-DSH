@@ -22,7 +22,6 @@
 ГРАНИЦЫ ВАЛИДАЦИИ             | ValidationLimits     | Диапазоны входных параметров
 ОСНОВНАЯ КОНФИГУРАЦИЯ         | Config               | Главный объект настроек
   └─ data_dir (property)      | Config.data_dir      | Путь к данным (env FAN_DATA_DIR)
-  └─ db_path  (property)      | Config.db_path       | Путь к SQLite (env FAN_DB_PATH)
 ЗАГРУЗКА ИЗ JSON              |                      |
   └─ Константы                | REQUIRED_FIELDS      | Обязательные поля config.json
   └─ Константы                | VALIDATION_FIELDS    | Поля секции validation
@@ -79,15 +78,11 @@ class ValidationLimits:
         q_max: Максимальный расход воздуха, м³/ч
         p_min: Минимальное давление, Па
         p_max: Максимальное давление, Па
-        t_air_min: Минимальная температура воздуха, °C
-        t_air_max: Максимальная температура воздуха, °C
     """
     q_min: float
     q_max: float
     p_min: float
     p_max: float
-    t_air_min: float
-    t_air_max: float
 
 
 @dataclass
@@ -127,7 +122,6 @@ class Config:
         default_d_reg_max_pa: Макс. дорегулирование по умолчанию, Па
         default_q_display: Расход для отображения графика, м³/ч
         top_n: Максимальное количество результатов в выдаче
-        pdf_output_dir: Папка для сохранения PDF-отчётов
         validation: Границы валидации входных данных
     """
     rho_air: float
@@ -137,7 +131,6 @@ class Config:
     default_d_reg_max_pa: float
     default_q_display: float
     top_n: int
-    pdf_output_dir: str
     validation: ValidationLimits
     vfd: VfdConfig = field(default_factory=VfdConfig)
 
@@ -155,18 +148,6 @@ class Config:
         base = getattr(os.sys, '_MEIPASS', os.path.dirname(os.path.dirname(__file__)))
         return os.path.join(base, "data")
 
-    @property
-    def db_path(self) -> str:
-        """Путь к SQLite-базе данных истории расчётов.
-
-        Может быть переопределён через переменную окружения FAN_DB_PATH.
-        По умолчанию — data/fan_history.db.
-        """
-        env_path = os.environ.get("FAN_DB_PATH")
-        if env_path:
-            return env_path
-        return os.path.join(self.data_dir, "fan_history.db")
-
 
 # =========================================================
 # ЗАГРУЗКА КОНФИГУРАЦИИ ИЗ JSON
@@ -176,13 +157,12 @@ class Config:
 REQUIRED_FIELDS = [
     "rho_air", "poly_degree", "min_points_for_degree",
     "default_d_reg_max_pa", "default_q_display",
-    "top_n", "pdf_output_dir", "validation", "safety_table",
+    "top_n", "validation", "safety_table",
 ]
 
 # Обязательные поля секции validation
 VALIDATION_FIELDS = [
     "q_min", "q_max", "p_min", "p_max",
-    "t_air_min", "t_air_max",
 ]
 
 # Значения по умолчанию: используются, если data/config.json отсутствует.
@@ -195,14 +175,11 @@ _DEFAULT_CONFIG = {
     "default_d_reg_max_pa": 1500.0,
     "default_q_display": 7500.0,
     "top_n": 10,
-    "pdf_output_dir": "pdfs",
     "validation": {
         "q_min": 100.0,
         "q_max": 100000.0,
         "p_min": 10.0,
         "p_max": 10000.0,
-        "t_air_min": -50.0,
-        "t_air_max": 200.0,
     },
     "safety_table": [
         {"max_power_kw": 0.5, "factor": 1.50},
@@ -347,7 +324,6 @@ def _validate_config(data: dict) -> None:
     _check_type(data, "default_d_reg_max_pa", (int, float))
     _check_type(data, "default_q_display", (int, float))
     _check_type(data, "top_n", (int,))
-    _check_type(data, "pdf_output_dir", (str,))
 
     # --- 3. Проверка диапазонов (корневой уровень) ---
     if data["rho_air"] <= 0:
@@ -378,8 +354,6 @@ def _validate_config(data: dict) -> None:
         raise ConfigError(
             f"Поле 'top_n' должно быть >= 1, получено {data['top_n']}"
         )
-    if not data["pdf_output_dir"].strip():
-        raise ConfigError("Поле 'pdf_output_dir' не должно быть пустой строкой")
 
     # --- 4. Проверка типов (validation) ---
     val = data["validation"]
@@ -404,11 +378,6 @@ def _validate_config(data: dict) -> None:
         raise ConfigError(
             f"Поле 'validation.p_min' ({val['p_min']}) должно быть < "
             f"validation.p_max ({val['p_max']})"
-        )
-    if val["t_air_max"] <= val["t_air_min"]:
-        raise ConfigError(
-            f"Поле 'validation.t_air_min' ({val['t_air_min']}) должно быть < "
-            f"validation.t_air_max ({val['t_air_max']})"
         )
 
 
@@ -552,14 +521,11 @@ def load_config() -> Config:
         default_d_reg_max_pa=float(data["default_d_reg_max_pa"]),
         default_q_display=float(data["default_q_display"]),
         top_n=int(data["top_n"]),
-        pdf_output_dir=str(data["pdf_output_dir"]),
         validation=ValidationLimits(
             q_min=float(data["validation"]["q_min"]),
             q_max=float(data["validation"]["q_max"]),
             p_min=float(data["validation"]["p_min"]),
             p_max=float(data["validation"]["p_max"]),
-            t_air_min=float(data["validation"]["t_air_min"]),
-            t_air_max=float(data["validation"]["t_air_max"]),
         ),
         vfd=vfd,
     )
