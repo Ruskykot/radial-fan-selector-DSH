@@ -143,12 +143,37 @@ function runPython(subprocess, op, payload, graceMs = 120000) {
 // ---------------------------------------------------------------------------
 // HTTP-утилиты
 // ---------------------------------------------------------------------------
+// Предел размера тела запроса: защищает от случайного/злонамеренного
+// заполнения памяти (массовый CSV — самый крупный реальный кейс).
+const MAX_BODY_BYTES = 5 * 1024 * 1024;
+
 function readBody(req) {
   return new Promise((resolve, reject) => {
     const chunks = [];
-    req.on('data', (c) => chunks.push(c));
-    req.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
-    req.on('error', reject);
+    let total = 0;
+    let settled = false;
+    req.on('data', (c) => {
+      if (settled) return;
+      total += c.length;
+      if (total > MAX_BODY_BYTES) {
+        settled = true;
+        chunks.length = 0;
+        reject(new Error('Тело запроса превышает 5 МБ'));
+        req.destroy();
+        return;
+      }
+      chunks.push(c);
+    });
+    req.on('end', () => {
+      if (settled) return;
+      settled = true;
+      resolve(Buffer.concat(chunks).toString('utf8'));
+    });
+    req.on('error', (e) => {
+      if (settled) return;
+      settled = true;
+      reject(e);
+    });
   });
 }
 
@@ -156,7 +181,6 @@ function sendJson(res, obj, status = 200) {
   const body = JSON.stringify(obj);
   res.writeHead(status, {
     'Content-Type': 'application/json; charset=utf-8',
-    'Access-Control-Allow-Origin': '*',
     'Content-Length': Buffer.byteLength(body),
   });
   res.end(body);
@@ -218,7 +242,6 @@ function registerRoutes(webServer, subprocess) {
         'Content-Type': 'text/csv; charset=utf-8',
         'Content-Length': body.length,
         'Content-Disposition': `attachment; filename="template.csv"; filename*=UTF-8''${encodeURIComponent(filename)}`,
-        'Access-Control-Allow-Origin': '*',
       });
       res.end(body);
     },

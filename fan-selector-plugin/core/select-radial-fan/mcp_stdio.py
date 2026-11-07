@@ -1,11 +1,8 @@
-"""Запуск MCP-сервера (stdio или streamable-http с CORS).
+"""Запуск MCP-сервера (stdio или streamable-http).
 
 Запуск (не зависит от рабочего каталога):
     python mcp_stdio.py                  # stdio
-    python mcp_stdio.py streamable-http  # http://127.0.0.1:8000/mcp (с CORS)
-
-CORS добавлен, чтобы браузерный MCP-клиент (React-артефакт) мог обращаться к
-серверу из iframe/другого origin.
+    python mcp_stdio.py streamable-http  # http://127.0.0.1:8000/mcp
 """
 import os
 import sys
@@ -17,15 +14,8 @@ from mcp_server.server import mcp  # noqa: E402
 
 def run_streamable_http(host: str = "127.0.0.1", port: int = 8000) -> None:
     import uvicorn
-    from starlette.middleware.cors import CORSMiddleware
 
     app = mcp.streamable_http_app(streamable_http_path="/mcp", host=host)
-    app = CORSMiddleware(
-        app,
-        allow_origins=["*"],
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
     uvicorn.run(app, host=host, port=port, log_level="info")
 
 
