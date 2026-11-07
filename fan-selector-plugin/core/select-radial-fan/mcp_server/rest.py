@@ -3,11 +3,13 @@
 Эндпоинты:
 - POST /select, /chart, /compare, /catalog — расчётное ядро;
 - GET /health — проверка живости;
-- GET/POST/DELETE /history — история подборов (файл `.fan-selector-history.json`
-  в корне рабочей области, путь переопределяется FAN_HISTORY_PATH; читается и
-  DSH-плагином, и инструментом агента `fan_selector_history`).
+- GET/POST/DELETE /history — локальная история подборов этого REST-сервера.
+  Файл `.fan-selector-history.json` в корне проекта, лимит 50 записей, путь
+  переопределяется FAN_HISTORY_PATH. Хранилище независимое — плагин DSH ведёт
+  свою историю (`~/.fan-selector-history.json`, лимит 5000) через
+  инструмент `fan_selector_history`.
 
-Порт 8001 (переопределяется FAN_REST_PORT), CORS открыт.
+Порт 8001 (переопределяется FAN_REST_PORT).
 """
 from __future__ import annotations
 
