@@ -3,4 +3,4 @@
 # (ядро fan_selector требует numpy и pillow — см. requirements.txt)
 mcp>=1.0
 # pywin32 нужен только на Windows (stdio-транспорт); на Linux/macOS не ставится
-pywin32>=306; sys_platform == "win32"
+pywin32>=312; sys_platform == "win32"
