@@ -2,8 +2,9 @@
 
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![CI](https://github.com/Ruskykot/radial-fan-selector-DSH/actions/workflows/ci.yml/badge.svg)](https://github.com/Ruskykot/radial-fan-selector-DSH/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/@rusky_kot/fan-selector.svg)](https://www.npmjs.com/package/@rusky_kot/fan-selector)
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
-[![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
+[![Node](https://img.shields.io/badge/node-%3E%3D20.19-brightgreen.svg)](https://nodejs.org/)
 
 **Русский** · [English](README.en.md)
 
@@ -55,7 +56,7 @@ React-панель «Подбор вентилятора». Расчёт вып�
 
 - DeepSeek Harness (DSH) `>= 0.2.0`;
 - Python ≥ 3.11 с `numpy` и `Pillow` (обязательно для расчёта);
-- для разработки: Node ≥ 20 + pnpm.
+- для разработки: Node ≥ 20.19 + pnpm.
 
 ## Установка (пользователям)
 
@@ -119,7 +120,7 @@ pip install ./fan-selector-plugin/core/select-radial-fan
 dsh plugin --profile <профиль> add "link:<путь_к_репозиторию>/fan-selector-plugin"
 ```
 
-Требования для разработки: Node ≥ 20 + pnpm (для сборки `web/`), Python 3.11+.
+Требования для разработки: Node ≥ 20.19 + pnpm (для сборки `web/`), Python 3.11+.
 
 Тесты расчётного ядра и адаптеров:
 

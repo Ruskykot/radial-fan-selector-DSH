@@ -2,7 +2,11 @@
 
 Формат — [Keep a Changelog](https://keepachangelog.com/), версии — SemVer.
 
-## [Unreleased]
+## [1.0.0] - 2026-11-07
+
+Первая публикация плагина в npm:
+[@rusky_kot/fan-selector](https://www.npmjs.com/package/@rusky_kot/fan-selector)
+(внутри — расчётное ядро `fan_selector` 2.4.0).
 
 ### Added
 - npm-канал распространения: Python-ядро и справочники поставляются **внутри**
@@ -35,6 +39,9 @@
 - CI: `pnpm install --frozen-lockfile`; тест регистрации MCP больше не подменяет
   SDK заглушкой — без SDK он даёт SKIP, с SDK проверяет реальный сервер.
 - Web-виджет: при ошибке подключения кэш MCP-клиента сбрасывается (переподключение).
+- Web-виджет: `vite` 5.4 → 8.3, `@vitejs/plugin-react` 4.7 → 6.2 — закрыты
+  17 алертов Dependabot по dev-зависимостям сборки (в npm-пакет не попадают);
+  требования к сборке подняты: Node ≥ 20.19, pnpm ≥ 10.
 - HTTP-гигиена: убран `Access-Control-Allow-Origin: *` у плагина и фолбэков,
   добавлен лимит тела запроса 5 МБ.
 

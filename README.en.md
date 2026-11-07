@@ -2,8 +2,9 @@
 
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 [![CI](https://github.com/Ruskykot/radial-fan-selector-DSH/actions/workflows/ci.yml/badge.svg)](https://github.com/Ruskykot/radial-fan-selector-DSH/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/@rusky_kot/fan-selector.svg)](https://www.npmjs.com/package/@rusky_kot/fan-selector)
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
-[![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
+[![Node](https://img.shields.io/badge/node-%3E%3D20.19-brightgreen.svg)](https://nodejs.org/)
 
 [Русская версия](README.md) · **English**
 
@@ -55,7 +56,7 @@ calculation runs in a separate Python core `fan_selector` (JSON in → JSON out)
 
 - DeepSeek Harness (DSH) `>= 0.2.0`;
 - Python ≥ 3.11 with `numpy` and `Pillow` (required for calculations);
-- for development: Node ≥ 20 + pnpm.
+- for development: Node ≥ 20.19 + pnpm.
 
 ## Installation (users)
 
@@ -119,7 +120,7 @@ pip install ./fan-selector-plugin/core/select-radial-fan
 dsh plugin --profile <profile> add "link:<repo_path>/fan-selector-plugin"
 ```
 
-Development requirements: Node ≥ 20 + pnpm (for building `web/`), Python 3.11+.
+Development requirements: Node ≥ 20.19 + pnpm (for building `web/`), Python 3.11+.
 
 Core and adapter tests:
 
