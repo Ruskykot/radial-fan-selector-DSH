@@ -26,11 +26,17 @@ from .models import Fan, Impeller, Motor, CatalogSize, Vfd
 
 
 # Путь к папке data/ с JSON-файлами вентиляторов.
-# Переопределяется переменной окружения FAN_DATA_DIR; по умолчанию —
-# папка data/ рядом с пакетом (на уровень выше fan_selector/).
+# Порядок разрешения:
+#   1) переменная окружения FAN_DATA_DIR — явное переопределение;
+#   2) fan_selector/data/ — установленный пакет (wheel; копируется build-хуком setup.py);
+#   3) data/ рядом с пакетом (на уровень выше fan_selector/) — запуск из репозитория.
+_PACKAGE_DIR = os.path.dirname(os.path.abspath(__file__))
+_PACKAGE_DATA_DIR = os.path.join(_PACKAGE_DIR, "data")
+_SIBLING_DATA_DIR = os.path.join(os.path.dirname(_PACKAGE_DIR), "data")
+
 DATA_DIR = os.environ.get(
     "FAN_DATA_DIR",
-    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data"),
+    _PACKAGE_DATA_DIR if os.path.isdir(_PACKAGE_DATA_DIR) else _SIBLING_DATA_DIR,
 )
 
 

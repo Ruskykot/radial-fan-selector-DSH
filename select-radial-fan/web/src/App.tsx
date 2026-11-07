@@ -34,7 +34,7 @@ export default function App() {
         <div style={{ minWidth: 0 }}>
           {error && (
             <div style={{ color: "#b00020", marginBottom: 12 }}>
-              Ошибка: {error} — запустите API-сервер (см. mcp_server) или задайте VITE_API_BASE.
+              Ошибка: {error} — запустите MCP-сервер (python mcp_stdio.py streamable-http) или задайте VITE_MCP_URL.
             </div>
           )}
           {result && result.error && (

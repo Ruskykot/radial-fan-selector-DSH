@@ -1,14 +1,40 @@
 version: 2
+
+# Обновления сгруппированы по экосистемам, мажорные версии не предлагаются
+# автоматически: их обновляем вручную, вместе с проверкой CI и web-сборки.
 updates:
   - package-ecosystem: pip
     directory: /select-radial-fan
     schedule:
       interval: weekly
+    open-pull-requests-limit: 3
+    groups:
+      python:
+        patterns: ["*"]
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
   - package-ecosystem: npm
     directory: /select-radial-fan/web
     schedule:
       interval: weekly
+    open-pull-requests-limit: 3
+    groups:
+      web:
+        patterns: ["*"]
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
+    open-pull-requests-limit: 3
+    groups:
+      actions:
+        patterns: ["*"]
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]

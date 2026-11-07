@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Безопасность / Security
+    url: https://github.com/Ruskykot/radial-fan-selector-DSH/security/advisories/new
+    about: Об уязвимостях сообщайте приватно, не через публичный Issue.
+  - name: Документация / Documentation
+    url: https://github.com/Ruskykot/radial-fan-selector-DSH#readme
+    about: README, CONTRIBUTING и CHANGELOG — начните отсюда.

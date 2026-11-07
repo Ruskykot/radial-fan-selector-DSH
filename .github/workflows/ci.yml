@@ -4,12 +4,18 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   core-tests:
+    name: core-tests (${{ matrix.os }}, py${{ matrix.python }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -22,9 +28,67 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - name: Install dependencies
-        run: python -m pip install --upgrade pip numpy
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r select-radial-fan/requirements.txt
       - name: Golden tests (calculation core)
         working-directory: select-radial-fan
         run: |
           python tests/test_golden.py
           python tests/test_golden_fixture.py
+      - name: Adapter tests (MCP tools logic + REST fallback)
+        working-directory: select-radial-fan
+        run: |
+          python tests/test_mcp.py
+          python tests/test_mcp_registration.py
+          python tests/test_rest.py
+
+  packaging:
+    name: packaging (pip install + wheel)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install the core as a regular package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install ./select-radial-fan
+      - name: Smoke-test the installed package (outside the checkout)
+        working-directory: ${{ runner.temp }}
+        run: |
+          python -c "import fan_selector; from fan_selector.repositories import DATA_DIR, load_fans, load_motors, load_catalog; print('data dir:', DATA_DIR); assert len(load_fans()) == 66; assert len(load_motors()) == 55; assert len(load_catalog()) == 31; print('installed package OK', fan_selector.__version__)"
+      - name: Build a wheel
+        run: python -m pip wheel --no-deps -w dist ./select-radial-fan
+      - name: Check the wheel ships the reference data
+        run: |
+          python - <<'PY'
+          import glob, zipfile
+          wheel = glob.glob("dist/fan_selector-*.whl")[0]
+          names = zipfile.ZipFile(wheel).namelist()
+          data = [n for n in names if n.startswith("fan_selector/data/") and n.endswith(".json")]
+          assert len(data) >= 6, data
+          print(wheel, "->", len(data), "data files")
+          PY
+
+  web-build:
+    name: web-build (pnpm + vite)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Версия pnpm берётся из packageManager в select-radial-fan/web/package.json
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: select-radial-fan/web/pnpm-lock.yaml
+      - name: Install web dependencies
+        working-directory: select-radial-fan/web
+        # lockfile сгенерирован pnpm 11 (lockfileVersion 9.0); не фиксируем
+        # frozen-режим, чтобы не зависеть от точной версии pnpm в CI
+        run: pnpm install --no-frozen-lockfile
+      - name: Build web widget
+        working-directory: select-radial-fan/web
+        run: pnpm build

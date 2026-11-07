@@ -1,6 +1,7 @@
 # fan-selector
 
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![CI](https://github.com/Ruskykot/radial-fan-selector-DSH/actions/workflows/ci.yml/badge.svg)](https://github.com/Ruskykot/radial-fan-selector-DSH/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
 
@@ -54,7 +55,8 @@ calculation runs in a separate Python core `fan_selector` (JSON in → JSON out)
 
 - DeepSeek Harness (DSH);
 - Node ≥ 20 + pnpm;
-- Python ≥ 3.11 with `numpy` (the core is installed as a regular package).
+- Python ≥ 3.11 with `numpy` and `Pillow` (the core is installed as a regular
+  package; dependencies are resolved automatically).
 
 ## Installation
 
@@ -294,12 +296,24 @@ of the calculation result breaks the test.
 cd select-radial-fan
 pip install -r requirements.txt -r requirements-mcp.txt
 python tests/test_golden.py
+python tests/test_golden_fixture.py
+python tests/test_mcp.py
+python tests/test_mcp_registration.py
+python tests/test_rest.py
 ```
 
 - UI (optional standalone React widget, not used by the plugin):
-  `cd web && pnpm install && pnpm dev`.
+  `cd web && pnpm install && pnpm dev` (build check — `pnpm build`).
 - MCP server: `python mcp_stdio.py streamable-http`.
 - REST fallback: `python run-rest.py 8100`.
+
+## Contributing
+
+- [CONTRIBUTING.md](CONTRIBUTING.md) — how to propose a change.
+- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) — community rules.
+- [SECURITY.md](SECURITY.md) — how to report a vulnerability.
+- [CHANGELOG.md](CHANGELOG.md) — version history.
+- Questions and bugs — via [Issues](https://github.com/Ruskykot/radial-fan-selector-DSH/issues).
 
 ## License
 

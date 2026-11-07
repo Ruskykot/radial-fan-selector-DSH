@@ -3,6 +3,16 @@
   "version": "1.0.0",
   "description": "DSH-плагин подбора радиальных вентиляторов ВР 86-77 и ВР 280-46 по расходу и давлению.",
   "license": "Apache-2.0",
+  "keywords": ["deepseek-harness", "dsh-plugin", "hvac", "ventilation", "fan-selection"],
+  "homepage": "https://github.com/Ruskykot/radial-fan-selector-DSH#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ruskykot/radial-fan-selector-DSH.git",
+    "directory": "fan-selector-plugin"
+  },
+  "bugs": {
+    "url": "https://github.com/Ruskykot/radial-fan-selector-DSH/issues"
+  },
   "type": "module",
   "exports": {
     ".": "./index.js",

@@ -19,24 +19,28 @@ pnpm build      # статический билд в dist/
 
 ## API
 
-Виджет делает `POST {VITE_API_BASE}/select` (по умолчанию `http://localhost:8000`)
-и ожидает `fan-result/v1` (см. `schema/result.schema.json`).
+Виджет — **MCP-клиент**: он подключается к MCP-серверу `fan-selector` по
+streamable-http и вызывает инструмент `select_fan` (см. `src/api.ts`,
+`@modelcontextprotocol/sdk`). Результат — контракт `fan-result/v1`
+(см. `schema/result.schema.json`).
 
-Два способа поднять API-сервер:
+Перед запуском виджета поднимите MCP-сервер из корня `select-radial-fan`:
 
-1. **REST-фолбэк** (stdlib, без зависимостей):
-   ```bash
-   python -m mcp_server.rest        # 127.0.0.1:8000
-   ```
-2. **MCP-сервер** (основной транспорт):
-   ```bash
-   pip install "mcp[cli]"
-   python -m mcp run mcp_server/server.py --transport streamable-http
-   ```
-   В этом случае виджет следует переключить с REST на MCP-клиент
-   (`@modelcontextprotocol/sdk`) — см. `src/api.ts`.
+```bash
+pip install -r requirements.txt -r requirements-mcp.txt
+python mcp_stdio.py streamable-http      # 127.0.0.1:8000/mcp
+```
 
-Переменная `VITE_API_BASE` задаёт адрес API (`.env`: `VITE_API_BASE=http://host:port`).
+Адрес сервера задаётся переменной `VITE_MCP_URL` (по умолчанию
+`http://127.0.0.1:8000/mcp`):
+
+```bash
+# .env
+VITE_MCP_URL=http://127.0.0.1:8000/mcp
+```
+
+REST-фолбэк (`python run-rest.py 8100`, `mcp_server/rest.py`) виджет **не**
+использует — он нужен сторонним HTTP-клиентам.
 
 ## Структура
 
@@ -48,7 +52,7 @@ web/
     ├── main.tsx, App.tsx
     ├── types.ts      # типы из schema/result.schema.json
     ├── config.ts     # границы валидации + списки фильтров
-    ├── api.ts        # транспорт (REST / MCP)
+    ├── api.ts        # MCP-транспорт (streamable-http)
     └── components/
         ├── FanForm.tsx       # ввод
         ├── ResultTable.tsx   # таблица прошедших

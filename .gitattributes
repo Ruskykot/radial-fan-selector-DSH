@@ -1,2 +1,15 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Медиа — бинарные файлы, без нормализации переводов строк
+*.gif binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+
+# Демо-GIF не сжимаем и не перекодируем
+docs/media/*.gif binary

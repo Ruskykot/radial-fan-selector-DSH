@@ -1,6 +1,7 @@
 # fan-selector
 
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![CI](https://github.com/Ruskykot/radial-fan-selector-DSH/actions/workflows/ci.yml/badge.svg)](https://github.com/Ruskykot/radial-fan-selector-DSH/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](https://nodejs.org/)
 
@@ -54,7 +55,8 @@ React-панель «Подбор вентилятора». Расчёт вып�
 
 - DeepSeek Harness (DSH);
 - Node ≥ 20 + pnpm;
-- Python ≥ 3.11 с `numpy` (ядро ставится как обычный пакет).
+- Python ≥ 3.11 с `numpy` и `Pillow` (ядро ставится как обычный пакет, зависимости
+  подтягиваются автоматически).
 
 ## Установка
 
@@ -296,12 +298,24 @@ fan_selector/
 cd select-radial-fan
 pip install -r requirements.txt -r requirements-mcp.txt
 python tests/test_golden.py
+python tests/test_golden_fixture.py
+python tests/test_mcp.py
+python tests/test_mcp_registration.py
+python tests/test_rest.py
 ```
 
 - UI (опциональный самостоятельный React-виджет, плагином не используется):
-  `cd web && pnpm install && pnpm dev`.
+  `cd web && pnpm install && pnpm dev` (проверка сборки — `pnpm build`).
 - MCP-сервер: `python mcp_stdio.py streamable-http`.
 - REST-фолбэк: `python run-rest.py 8100`.
+
+## Участие
+
+- [CONTRIBUTING.md](CONTRIBUTING.md) — как предложить изменение.
+- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) — правила общения.
+- [SECURITY.md](SECURITY.md) — как сообщить об уязвимости.
+- [CHANGELOG.md](CHANGELOG.md) — история версий.
+- Вопросы и ошибки — через [Issues](https://github.com/Ruskykot/radial-fan-selector-DSH/issues).
 
 ## Лицензия
 

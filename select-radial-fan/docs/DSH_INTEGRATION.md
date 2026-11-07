@@ -15,7 +15,7 @@ React-панель «Подбор вентилятора» в интерфейс
 
 - DeepSeek Harness (DSH);
 - Node ≥ 20 + pnpm;
-- Python ≥ 3.11 с `numpy` (ядро ставится как пакет: `pip install ./select-radial-fan`).
+- Python ≥ 3.11 с `numpy` и `Pillow` (ядро ставится как пакет: `pip install ./select-radial-fan`).
 
 ## Подключение плагина
 
@@ -55,7 +55,7 @@ python mcp_stdio.py                # stdio
 python mcp_stdio.py streamable-http  # http://127.0.0.1:8000/mcp
 ```
 
-Для stdio укажите в `mcp.example.json` свой интерпретатор Python (с `mcp` и `numpy`).
+Для stdio укажите в `mcp.example.json` свой интерпретатор Python (с `mcp`, `numpy` и `Pillow`).
 
 ## Проверка
 

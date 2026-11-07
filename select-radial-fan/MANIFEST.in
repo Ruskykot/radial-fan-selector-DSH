@@ -1,0 +1,17 @@
+include README.md
+include requirements.txt
+include requirements-mcp.txt
+
+# Справочники: нужны в sdist, чтобы сборка wheel из архива тоже их содержала.
+recursive-include data *.json
+
+# Схемы и примеры конфигурации — полезны в исходном дистрибутиве.
+recursive-include schema *.json
+include mcp.example.json
+include start.ps1
+
+# Тесты и скрипты в дистрибутив не кладём: они не нужны для установки.
+prune tests
+prune scripts
+prune web
+prune docs

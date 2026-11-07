@@ -9,11 +9,15 @@
 ## Установка
 
 ```bash
-pip install -e .
+pip install .
 ```
 
-или просто `pip install numpy` и запуск из этого каталога (пакет разрешается из
-текущей папки).
+Зависимости: `numpy` (расчёт) и `Pillow` (PNG-графики) — ставятся автоматически.
+Справочники `data/*.json` поставляются вместе с пакетом (в wheel попадают как
+`fan_selector/data/`); переменная `FAN_DATA_DIR` позволяет указать свой каталог.
+
+Для разработки удобнее editable-установка: `pip install -e .` (справочники
+берутся из каталога `data/` рядом с пакетом).
 
 ## Запуск
 
@@ -43,9 +47,12 @@ r = run_selection({"q_req": 7500, "p_req": 700, "pressure_type": "FULL"})
 ```bash
 python tests/test_golden.py
 python tests/test_golden_fixture.py
+python tests/test_mcp.py
+python tests/test_mcp_registration.py
+python tests/test_rest.py
 ```
 
-MCP-тесты (`tests/test_mcp*.py`, `tests/test_rest.py`) требуют `mcp`
+Только `tests/test_mcp_transport.py` требует MCP SDK
 (`pip install -r requirements-mcp.txt`); на Windows для stdio — также `pywin32`.
 
 ## Документация

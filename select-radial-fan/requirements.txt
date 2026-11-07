@@ -1,1 +1,7 @@
+# Зависимости расчётного ядра fan_selector.
+# Установить: pip install -r requirements.txt
+# (ядро поставляется как обычный пакет: pip install ./select-radial-fan)
 numpy>=1.24
+# Pillow нужен для PNG-графиков (fan_selector/chart.py) и импортируется
+# транзитивно через fan_selector.select, поэтому это обязательная зависимость.
+pillow>=10.0

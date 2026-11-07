@@ -1,6 +1,6 @@
 # Зависимости MCP-слоя fan-selector (Python >=3.11).
 # Установить: pip install -r requirements-mcp.txt
-# (ядро fan_selector требует numpy — см. requirements.txt)
+# (ядро fan_selector требует numpy и pillow — см. requirements.txt)
 mcp>=1.0
 # pywin32 нужен только на Windows (stdio-транспорт); на Linux/macOS не ставится
 pywin32>=306; sys_platform == "win32"

@@ -4,16 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fan-selector"
-version = "2.3.0"
+version = "2.4.0"
 description = "Подбор радиальных вентиляторов серий ВР 86-77 и ВР 280-46 (расчётное ядро)"
 readme = "README.md"
 license = { text = "Apache-2.0" }
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 authors = [{ name = "Ruskykot" }]
 keywords = ["fans", "ventilation", "selection", "вентиляторы", "подбор"]
 classifiers = [
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "License :: OSI Approved :: Apache Software License",
@@ -22,6 +21,7 @@ classifiers = [
 ]
 dependencies = [
     "numpy>=1.24.0",
+    "pillow>=10.0",
 ]
 
 [project.optional-dependencies]
@@ -37,5 +37,6 @@ Issues = "https://github.com/Ruskykot/radial-fan-selector-DSH/issues"
 where = ["."]
 include = ["fan_selector*", "mcp_server*"]
 
-[tool.setuptools.package-data]
-fan_selector = ["../data/*.json"]
+# Справочники data/*.json лежат рядом с пакетом (см. repositories.py).
+# В wheel они попадают в fan_selector/data/ — копирование выполняет
+# build-хук из setup.py; MANIFEST.in включает их в sdist.
