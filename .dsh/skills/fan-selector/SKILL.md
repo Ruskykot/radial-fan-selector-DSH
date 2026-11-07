@@ -5,9 +5,9 @@ description: Подбор радиальных вентиляторов ВР 86-
 
 # Подбор радиальных вентиляторов
 
-Расчётное ядро `fan_selector` живёт в каталоге `select-radial-fan/` (Python,
-JSON-in/JSON-out). Навык — тонкий указатель: расчёт выполняет ядро, а не
-пересказ формул в чате.
+Расчётное ядро `fan_selector` живёт в каталоге
+`fan-selector-plugin/core/select-radial-fan/` (Python, JSON-in/JSON-out). Навык —
+тонкий указатель: расчёт выполняет ядро, а не пересказ формул в чате.
 
 ## Приоритетный путь
 
@@ -29,10 +29,10 @@ JSON-in/JSON-out). Навык — тонкий указатель: расчёт 
 
 ## Фолбэк (когда MCP/виджет недоступны)
 
-Запусти ядро одним процессом из каталога `select-radial-fan/`:
+Запусти ядро одним процессом из каталога `fan-selector-plugin/core/select-radial-fan/`:
 
 ```text
-cd select-radial-fan
+cd fan-selector-plugin/core/select-radial-fan
 echo {"q_req":7500,"p_req":700,"pressure_type":"FULL"} | python -m fan_selector --json
 ```
 
@@ -41,7 +41,7 @@ echo {"q_req":7500,"p_req":700,"pressure_type":"FULL"} | python -m fan_selector 
 ```python
 import sys
 from pathlib import Path
-sys.path.insert(0, str(Path("select-radial-fan").resolve()))
+sys.path.insert(0, str(Path("fan-selector-plugin/core/select-radial-fan").resolve()))
 from fan_selector.select import run_selection, chart_selection
 r = run_selection({"q_req": 7500, "p_req": 700, "pressure_type": "FULL"})
 ```

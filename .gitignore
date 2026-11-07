@@ -29,3 +29,6 @@ output/
 
 # Local DSH MCP config (committed template: mcp.example.json)
 mcp.json
+
+# npm pack артефакты
+*.tgz

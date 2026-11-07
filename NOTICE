@@ -5,7 +5,7 @@ This project is licensed under the Apache License, Version 2.0 (see LICENSE).
 
 Reference data
 --------------
-The reference data in `select-radial-fan/data/*.json` (fan and impeller
+The reference data in `fan-selector-plugin/core/select-radial-fan/data/*.json` (fan and impeller
 characteristics, motor and VFD catalogues, dimensions and mass) is compiled from
 manufacturer catalogues and technical documentation for engineering selection
 purposes. The copyrights in the original catalogues belong to their respective

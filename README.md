@@ -45,7 +45,7 @@ React-панель «Подбор вентилятора». Расчёт вып�
 | Каталог/файл | Назначение |
 |---|---|
 | `fan-selector-plugin/` | DSH-бандл: хост `index.js` + клиент `client.js` (+ `locale`, `cordis.patch.yml`) |
-| `select-radial-fan/` | Python-ядро `fan_selector`, справочники `data/`, MCP/REST-адаптеры, React-UI `web/` |
+| `fan-selector-plugin/core/select-radial-fan/` | Python-ядро `fan_selector`, справочники `data/`, MCP/REST-адаптеры, React-UI `web/` |
 | `.dsh/skills/fan-selector/SKILL.md` | навык для агента DSH |
 | `run_once.py` | одноразовый JSON-in/JSON-out раннер ядра (вызывает плагин) |
 | `run-rest.py` | REST-фолбэк ядра на отдельном порту (опционально) |
@@ -67,7 +67,7 @@ React-панель «Подбор вентилятора». Расчёт вып�
 ### 1. Поставить расчётное ядро
 
 ```bash
-pip install ./select-radial-fan
+pip install ./fan-selector-plugin/core/select-radial-fan
 ```
 
 ### 2. Добавить плагин в профиль DSH
@@ -215,7 +215,7 @@ sequenceDiagram
 ## Расчётное ядро
 
 Ядро — чистые функции Python без I/O: `dict → dict`. Лежит в
-`select-radial-fan/fan_selector/`.
+`fan-selector-plugin/core/select-radial-fan/fan_selector/`.
 
 ### Слои и модули
 
@@ -254,7 +254,7 @@ fan_selector/
    `n_kw ≥ N_расч`, минимальная достаточная.
 7. Оценить шум корпуса и отсортировать по `Δрег`.
 
-Подробности — [`select-radial-fan/docs/CALCULATION.md`](select-radial-fan/docs/CALCULATION.md).
+Подробности — [`fan-selector-plugin/core/select-radial-fan/docs/CALCULATION.md`](fan-selector-plugin/core/select-radial-fan/docs/CALCULATION.md).
 
 ### Контракт результата (`fan-result/v1`)
 
@@ -280,7 +280,7 @@ fan_selector/
 
 ### Проверка (golden)
 
-`select-radial-fan/tests/test_golden.py` фиксирует эталонные числа: любое
+`fan-selector-plugin/core/select-radial-fan/tests/test_golden.py` фиксирует эталонные числа: любое
 изменение результата расчёта ломает тест.
 
 ## Переменные окружения плагина
@@ -289,13 +289,13 @@ fan_selector/
 |---|---|---|
 | `FAN_SELECTOR_RUNNER` | путь к `run_once.py` | `<репозиторий>/run_once.py` |
 | `FAN_SELECTOR_PYTHON` | интерпретатор Python (с `numpy`) | `python` / `python3` |
-| `FAN_SELECTOR_CORE` | путь к пакету `fan_selector` | `<репозиторий>/select-radial-fan` |
+| `FAN_SELECTOR_CORE` | путь к пакету `fan_selector` | `<репозиторий>/fan-selector-plugin/core/select-radial-fan` |
 | `FAN_SELECTOR_HISTORY` | файл истории подборов | `~/.fan-selector-history.json` |
 
 ## Разработка и тесты
 
 ```bash
-cd select-radial-fan
+cd fan-selector-plugin/core/select-radial-fan
 pip install -r requirements.txt -r requirements-mcp.txt
 python tests/test_golden.py
 python tests/test_golden_fixture.py

@@ -45,7 +45,7 @@ calculation runs in a separate Python core `fan_selector` (JSON in → JSON out)
 | Path | Purpose |
 |---|---|
 | `fan-selector-plugin/` | DSH bundle: host `index.js` + client `client.js` (+ `locale`, `cordis.patch.yml`) |
-| `select-radial-fan/` | Python core `fan_selector`, `data/` references, MCP/REST adapters, React UI `web/` |
+| `fan-selector-plugin/core/select-radial-fan/` | Python core `fan_selector`, `data/` references, MCP/REST adapters, React UI `web/` |
 | `.dsh/skills/fan-selector/SKILL.md` | agent skill for DSH |
 | `run_once.py` | one-shot JSON-in / JSON-out core runner (used by the plugin) |
 | `run-rest.py` | optional REST fallback of the core on a separate port |
@@ -67,7 +67,7 @@ Python core is installed separately.
 ### 1. Install the calculation core
 
 ```bash
-pip install ./select-radial-fan
+pip install ./fan-selector-plugin/core/select-radial-fan
 ```
 
 ### 2. Add the plugin to the DSH profile
@@ -213,7 +213,7 @@ The maximum is 5000 rows per file.
 ## Calculation core
 
 The core is pure Python without I/O: `dict → dict`. It lives in
-`select-radial-fan/fan_selector/`.
+`fan-selector-plugin/core/select-radial-fan/fan_selector/`.
 
 ### Layers and modules
 
@@ -252,7 +252,7 @@ fan_selector/
    `n_kw ≥ N_calc`, the smallest sufficient one.
 7. Estimate casing noise and sort by `Δreg`.
 
-Details — [`select-radial-fan/docs/CALCULATION.md`](select-radial-fan/docs/CALCULATION.md).
+Details — [`fan-selector-plugin/core/select-radial-fan/docs/CALCULATION.md`](fan-selector-plugin/core/select-radial-fan/docs/CALCULATION.md).
 
 ### Result contract (`fan-result/v1`)
 
@@ -278,7 +278,7 @@ thrown outward.
 
 ### Golden checks
 
-`select-radial-fan/tests/test_golden.py` pins the reference numbers: any change
+`fan-selector-plugin/core/select-radial-fan/tests/test_golden.py` pins the reference numbers: any change
 of the calculation result breaks the test.
 
 ## Plugin environment variables
@@ -287,13 +287,13 @@ of the calculation result breaks the test.
 |---|---|---|
 | `FAN_SELECTOR_RUNNER` | path to `run_once.py` | `<repo>/run_once.py` |
 | `FAN_SELECTOR_PYTHON` | Python interpreter (with `numpy`) | `python` / `python3` |
-| `FAN_SELECTOR_CORE` | path to the `fan_selector` package | `<repo>/select-radial-fan` |
+| `FAN_SELECTOR_CORE` | path to the `fan_selector` package | `<repo>/fan-selector-plugin/core/select-radial-fan` |
 | `FAN_SELECTOR_HISTORY` | selection history file | `~/.fan-selector-history.json` |
 
 ## Development & tests
 
 ```bash
-cd select-radial-fan
+cd fan-selector-plugin/core/select-radial-fan
 pip install -r requirements.txt -r requirements-mcp.txt
 python tests/test_golden.py
 python tests/test_golden_fixture.py

@@ -14,13 +14,26 @@
     "url": "https://github.com/Ruskykot/radial-fan-selector-DSH/issues"
   },
   "type": "module",
+  "engines": {
+    "dsh": ">=0.2.0-0"
+  },
   "exports": {
     ".": "./index.js",
     "./client": "./client.js",
     "./locale/*.json": "./locale/*.json",
     "./icon": "./icon.svg"
   },
-  "files": ["index.js", "client.js", "cordis.patch.yml", "locale/*.json", "icon.svg"],
+  "files": [
+    "index.js",
+    "client.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "core/run_once.py",
+    "core/select-radial-fan/fan_selector/**",
+    "core/select-radial-fan/data/**",
+    "!**/__pycache__/**"
+  ],
   "dsh": {
     "bundle": { "patch": "./cordis.patch.yml" },
     "client": {

@@ -4,7 +4,7 @@ version: 2
 # автоматически: их обновляем вручную, вместе с проверкой CI и web-сборки.
 updates:
   - package-ecosystem: pip
-    directory: /select-radial-fan
+    directory: /fan-selector-plugin/core/select-radial-fan
     schedule:
       interval: weekly
     open-pull-requests-limit: 3
@@ -16,7 +16,7 @@ updates:
         update-types: ["version-update:semver-major"]
 
   - package-ecosystem: npm
-    directory: /select-radial-fan/web
+    directory: /fan-selector-plugin/core/select-radial-fan/web
     schedule:
       interval: weekly
     open-pull-requests-limit: 3

@@ -15,20 +15,80 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // Пути вычисляются от фактического расположения плагина (не зашиты в код),
-// поэтому репозиторий можно клонировать в любую папку и на любую ОС.
+// поэтому пакет можно ставить в любой профиль DSH и на любую ОС.
+// Расчётное ядро (Python) поставляется внутри пакета в каталоге core/.
 // Переопределение через переменные окружения:
 //   FAN_SELECTOR_RUNNER  — путь к run_once.py (JSON-in/JSON-out раннер);
-//   FAN_SELECTOR_PYTHON  — интерпретатор Python (нужен numpy);
+//   FAN_SELECTOR_PYTHON  — интерпретатор Python (нужен numpy и Pillow);
 //   FAN_SELECTOR_HISTORY — файл истории (по умолчанию ~/.fan-selector-history.json);
 //   FAN_SELECTOR_CORE    — путь к пакету fan_selector (читается в run_once.py).
 const PLUGIN_DIR = path.dirname(fileURLToPath(import.meta.url));
-const PROJECT_ROOT = path.resolve(PLUGIN_DIR, '..');
-const RUN_ONCE = process.env.FAN_SELECTOR_RUNNER || path.join(PROJECT_ROOT, 'run_once.py');
+const CORE_DIR = path.join(PLUGIN_DIR, 'core');
+const RUN_ONCE = process.env.FAN_SELECTOR_RUNNER || path.join(CORE_DIR, 'run_once.py');
 const HISTORY_PATH = process.env.FAN_SELECTOR_HISTORY || path.join(homedir(), '.fan-selector-history.json');
 const PYTHON = process.env.FAN_SELECTOR_PYTHON || (process.platform === 'win32' ? 'python' : 'python3');
 const HISTORY_CAP = 5000;
 
+// Тексты ошибок окружения (показываются в панели и в ответе API).
+const CORE_MISSING_MESSAGE =
+  'Расчётное ядро не найдено в каталоге плагина (ожидался core/run_once.py). ' +
+  'Переустановите плагин или задайте FAN_SELECTOR_RUNNER.';
+const PYTHON_MISSING_MESSAGE =
+  'Python не найден. Установите Python 3.11+ (python.org) и выполните: pip install numpy pillow. ' +
+  'Либо задайте FAN_SELECTOR_PYTHON.';
+const PYTHON_LIBS_MESSAGE =
+  'Python 3.11+ с библиотеками numpy и Pillow не найден. ' +
+  'Установите Python 3.11+ (python.org) и выполните: pip install numpy pillow. ' +
+  'Либо задайте FAN_SELECTOR_PYTHON.';
+
 export const inject = ['tools', 'webServer', 'subprocess'];
+
+// ---------------------------------------------------------------------------
+// Проверка окружения Python (один раз на старте плагина; перезапуск DSH
+// проверяет заново — так пользователь может доустановить Python/библиотеки)
+// ---------------------------------------------------------------------------
+const PYTHON_CHECK_SCRIPT =
+  'import sys; print(sys.version_info[0], sys.version_info[1]); import numpy, PIL';
+
+let pythonEnvPromise = null;
+
+function checkPythonEnv(subprocess) {
+  if (pythonEnvPromise) return pythonEnvPromise;
+  pythonEnvPromise = (async () => {
+    if (!existsSync(RUN_ONCE)) {
+      return CORE_MISSING_MESSAGE;
+    }
+    let handle;
+    try {
+      handle = subprocess.spawn({
+        argv: [PYTHON, '-c', PYTHON_CHECK_SCRIPT],
+        cwd: PLUGIN_DIR,
+        stdio: {
+          stdin: { data: '' },
+          stdout: { maxBytes: 64 * 1024 },
+          stderr: { maxBytes: 64 * 1024 },
+        },
+        graceMs: 8000,
+      });
+    } catch (e) {
+      // Спавн не удался: интерпретатор не найден (в Windows это также ловит
+      // заглушку Microsoft Store, которая завершается с ошибкой запуска).
+      return PYTHON_MISSING_MESSAGE;
+    }
+    let outcome;
+    try {
+      outcome = await handle.done;
+    } catch (e) {
+      return PYTHON_MISSING_MESSAGE;
+    }
+    if (outcome.exitCode !== 0) {
+      return PYTHON_LIBS_MESSAGE;
+    }
+    return null;
+  })();
+  return pythonEnvPromise;
+}
+
 
 // ---------------------------------------------------------------------------
 // История (файл в корне рабочей области; переживает перезапуск DSH)
@@ -53,12 +113,12 @@ async function writeHistory(entries) {
 function runPython(subprocess, op, payload, graceMs = 120000) {
   const input = JSON.stringify({ op, payload });
   if (!existsSync(RUN_ONCE)) {
-    throw new Error('Не найден раннер run_once.py. Задайте FAN_SELECTOR_RUNNER или склонируйте репозиторий целиком.');
+    throw new Error(CORE_MISSING_MESSAGE);
   }
   const argv = [PYTHON, RUN_ONCE];
   const handle = subprocess.spawn({
     argv,
-    cwd: PROJECT_ROOT,
+    cwd: PLUGIN_DIR,
     stdio: {
       stdin: { data: input },
       stdout: { maxBytes: 80 * 1024 * 1024 },
@@ -115,6 +175,13 @@ function registerRoutes(webServer, subprocess) {
       handler: async (req, res) => {
         if (req.method !== 'POST') {
           return sendJson(res, { error: { code: 'METHOD', message: 'method not allowed' } }, 405);
+        }
+        const envProblem = await checkPythonEnv(subprocess);
+        if (envProblem) {
+          return sendJson(res, {
+            schema: 'fan-result/v1',
+            error: { code: 'ENV', message: envProblem },
+          }, 500);
         }
         try {
           const payload = JSON.parse((await readBody(req)) || '{}');

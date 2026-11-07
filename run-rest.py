@@ -2,8 +2,8 @@
 
     python run-rest.py 8100
 
-Пакет fan_selector ищется через FAN_SELECTOR_CORE, рядом (select-radial-fan/)
-или как установленный pip-пакет.
+Пакет fan_selector ищется через FAN_SELECTOR_CORE, рядом
+(fan-selector-plugin/core/select-radial-fan/) или как установленный pip-пакет.
 """
 import os
 import sys
@@ -13,8 +13,11 @@ from pathlib import Path
 _core = os.environ.get("FAN_SELECTOR_CORE")
 if _core and Path(_core).is_dir():
     sys.path.insert(0, _core)
-elif (Path(__file__).resolve().parent / "select-radial-fan").is_dir():
-    sys.path.insert(0, str(Path(__file__).resolve().parent / "select-radial-fan"))
+else:
+    # Раскладка монорепозитория: ядро внутри пакета плагина.
+    _local = Path(__file__).resolve().parent / "fan-selector-plugin" / "core" / "select-radial-fan"
+    if _local.is_dir():
+        sys.path.insert(0, str(_local))
 
 from mcp_server.rest import Handler  # noqa: E402
 

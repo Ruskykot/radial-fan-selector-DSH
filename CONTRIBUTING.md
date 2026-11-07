@@ -15,7 +15,7 @@
 ## Перед PR / Before a PR
 
 ```bash
-cd select-radial-fan
+cd fan-selector-plugin/core/select-radial-fan
 python tests/test_golden.py
 python tests/test_golden_fixture.py
 ```
