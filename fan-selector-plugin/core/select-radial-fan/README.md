@@ -4,7 +4,7 @@
 точке (расход + давление): JSON на входе → JSON на выходе, без I/O-интерфейсов.
 
 > Основной продукт — **плагин DeepSeek Harness**; см. корневой
-> [README](../README.md) и [`docs/DSH_INTEGRATION.md`](docs/DSH_INTEGRATION.md).
+> [README](../../../README.md) и [`docs/DSH_INTEGRATION.md`](docs/DSH_INTEGRATION.md).
 
 ## Установка
 
@@ -59,13 +59,13 @@ python tests/test_rest.py
 
 - [`docs/CALCULATION.md`](docs/CALCULATION.md) — как считается расчёт.
 - [`docs/DSH_INTEGRATION.md`](docs/DSH_INTEGRATION.md) — интеграция с DSH.
-- `docs/MCP.md`, `docs/ARTIFACT_REACT.md`, `docs/SYNTHESIS.md`, `docs/VFD_TZ.md`,
-  `docs/ARTIFACT_WASM.md` — дизайн-заметки (частично исторические).
+- `docs/archive/MCP.md`, `docs/ARTIFACT_REACT.md`, `docs/SYNTHESIS.md`, `docs/VFD_TZ.md`,
+  `docs/archive/ARTIFACT_WASM.md` — дизайн-заметки (частично исторические).
 
 ## Данные и лицензия
 
-Справочники `data/*.json` описаны в [`../NOTICE`](../NOTICE);
-код — Apache-2.0 (см. [`../LICENSE`](../LICENSE)).
+Справочники `data/*.json` описаны в [`NOTICE`](../../../NOTICE);
+код — Apache-2.0 (см. [`LICENSE`](../../../LICENSE)).
 
 `start.ps1` — удобный запуск (MCP + UI + REST) только для Windows; на
 Linux/macOS используйте команды выше.

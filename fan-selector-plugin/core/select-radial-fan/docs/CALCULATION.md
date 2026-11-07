@@ -617,4 +617,4 @@ python tests/test_golden.py
 
 ## Лицензия
 
-Apache-2.0 — см. [LICENSE](../LICENSE).
+Apache-2.0 — см. [LICENSE](../../../LICENSE).
