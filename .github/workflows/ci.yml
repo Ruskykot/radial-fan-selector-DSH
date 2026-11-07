@@ -77,11 +77,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      # Версия pnpm берётся из packageManager в select-radial-fan/web/package.json
+      # В корне репозитория нет package.json, поэтому версию pnpm задаём явно
       - uses: pnpm/action-setup@v4
+        with:
+          version: 11
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
           cache-dependency-path: select-radial-fan/web/pnpm-lock.yaml
       - name: Install web dependencies
