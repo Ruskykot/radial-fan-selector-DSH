@@ -88,9 +88,7 @@ jobs:
           cache-dependency-path: fan-selector-plugin/core/select-radial-fan/web/pnpm-lock.yaml
       - name: Install web dependencies
         working-directory: fan-selector-plugin/core/select-radial-fan/web
-        # lockfile сгенерирован pnpm 11 (lockfileVersion 9.0); не фиксируем
-        # frozen-режим, чтобы не зависеть от точной версии pnpm в CI
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --frozen-lockfile
       - name: Build web widget
         working-directory: fan-selector-plugin/core/select-radial-fan/web
         run: pnpm build
