@@ -1,0 +1,31 @@
+{
+    "rho_air": 1.2,
+    "poly_degree": 6,
+    "min_points_for_degree": 7,
+    "default_d_reg_max_pa": 1500.0,
+    "default_q_display": 7500.0,
+    "top_n": 10,
+    "pdf_output_dir": "pdfs",
+    "validation": {
+        "q_min": 100.0,
+        "q_max": 100000.0,
+        "p_min": 10.0,
+        "p_max": 10000.0,
+        "t_air_min": -50.0,
+        "t_air_max": 200.0
+    },
+    "safety_table": [
+        { "max_power_kw": 0.5,  "factor": 1.50 },
+        { "max_power_kw": 1.0,  "factor": 1.30 },
+        { "max_power_kw": 2.0,  "factor": 1.20 },
+        { "max_power_kw": 5.0,  "factor": 1.15 },
+        { "max_power_kw": null, "factor": 1.10 }
+    ],
+    "vfd": {
+        "f_nom_hz": 50.0,
+        "f_min_hz_default": 20.0,
+        "f_max_hz_default": 60.0,
+        "eta_vfd": 0.97,
+        "eta_motor_part_load": 0.85
+    }
+}

@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://fan-selector/schema/result.json",
+  "title": "Результат подбора радиального вентилятора",
+  "type": "object",
+  "required": ["schema", "query", "summary", "results"],
+  "properties": {
+    "schema": { "const": "fan-result/v1" },
+    "query": {
+      "type": "object",
+      "required": ["q_req", "p_req", "pressure_type"],
+      "properties": {
+        "q_req": { "type": "number" },
+        "p_req": { "type": "number" },
+        "pressure_type": { "type": "string" },
+        "d_reg_max": { "type": "number" },
+        "t_air": { "type": "number" },
+        "series": { "type": "array", "items": { "type": "string" } },
+        "sizes": { "type": "array", "items": { "type": "number" } },
+        "rpms": { "type": "array", "items": { "type": "integer" } }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "properties": {
+        "total": { "type": "integer" },
+        "passed": { "type": "integer" },
+        "best_model": { "type": ["string", "null"] },
+        "best_d_reg_pa": { "type": ["number", "null"] }
+      }
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["model", "status", "passed"],
+        "properties": {
+          "model": { "type": "string" },
+          "series": { "type": "string" },
+          "size": { "type": "number" },
+          "dn": { "type": ["number", "null"] },
+          "d_over_dn": { "type": ["number", "null"] },
+          "max_n": { "type": "integer" },
+          "dims": { "type": "object" },
+          "mass": { "type": ["number", "null"] },
+          "executions": { "type": "array", "items": { "type": "string" } },
+          "noise_by_rpm": { "type": "object" },
+          "status": { "type": "string" },
+          "passed": { "type": "boolean" },
+          "d_reg_pa": { "type": "number" },
+          "eta_req": { "type": "number" },
+          "n_shaft_with_margin_w": { "type": "number" },
+          "n_shaft_kw": { "type": "number" },
+          "motor": {
+            "type": ["object", "null"],
+            "properties": {
+              "name": { "type": "string" },
+              "n_kw": { "type": "number" },
+              "n_rpm": { "type": "integer" },
+              "i_nom": { "type": ["number", "null"] }
+            }
+          },
+          "noise_body_dba": { "type": "number" },
+          "q_work": { "type": "number" },
+          "p_work": { "type": "number" },
+          "regulation_mode": { "type": "string" },
+          "f_hz": { "type": ["number", "null"] },
+          "n_rpm": { "type": ["number", "null"] },
+          "q0": { "type": ["number", "null"] },
+          "n_in_w": { "type": ["number", "null"] },
+          "vfd": {
+            "type": ["object", "null"],
+            "properties": {
+              "model": { "type": "string" },
+              "p_kw": { "type": "number" },
+              "i_nom_a": { "type": "number" },
+              "u_in": { "type": "string" },
+              "phase": { "type": "string" }
+            }
+          },
+          "curve": {
+            "type": "object",
+            "properties": {
+              "q_points": { "type": "array", "items": { "type": "number" } },
+              "p_points": { "type": "array", "items": { "type": "number" } },
+              "q_eff": { "type": "array", "items": { "type": "number" } },
+              "eff_points": { "type": "array", "items": { "type": "number" } },
+              "q_min": { "type": "number" },
+              "q_max": { "type": "number" }
+            }
+          }
+        }
+      }
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "code": { "type": "string" },
+        "message": { "type": "string" }
+      }
+    }
+  }
+}

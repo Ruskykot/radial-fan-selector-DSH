@@ -1,0 +1,73 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://fan-selector/schema/selection.json",
+  "title": "Запрос на подбор радиального вентилятора",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["q_req", "p_req"],
+  "properties": {
+    "q_req": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Требуемый расход воздуха, м³/ч"
+    },
+    "p_req": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Требуемое давление, Па"
+    },
+    "pressure_type": {
+      "type": "string",
+      "enum": ["FULL", "STATIC"],
+      "default": "FULL",
+      "description": "Тип давления: полное (FULL) или статическое (STATIC)"
+    },
+    "d_reg_max": {
+      "type": "number",
+      "minimum": 0,
+      "default": 1500.0,
+      "description": "Максимально допустимое дорегулирование, Па"
+    },
+    "t_air": {
+      "type": "number",
+      "default": 20.0,
+      "description": "Температура воздуха, °C"
+    },
+    "series": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": [],
+      "description": "Фильтр по сериям (пусто = все)"
+    },
+    "sizes": {
+      "type": "array",
+      "items": { "type": "number" },
+      "default": [],
+      "description": "Фильтр по диаметру колеса, м (пусто = все)"
+    },
+    "rpms": {
+      "type": "array",
+      "items": { "type": "integer" },
+      "default": [],
+      "description": "Фильтр по частоте вращения, об/мин (пусто = все)"
+    },
+    "regulation_mode": {
+      "type": "string",
+      "enum": ["THROTTLE", "VFD"],
+      "default": "THROTTLE",
+      "description": "Режим регулирования: дроссельный (THROTTLE) или частотный (VFD)"
+    },
+    "freq_min_hz": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "default": 20.0,
+      "description": "Минимальная частота ЧРП, Гц (для режима VFD)"
+    },
+    "freq_max_hz": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "default": 60.0,
+      "description": "Максимальная частота ЧРП, Гц (для режима VFD)"
+    }
+  }
+}

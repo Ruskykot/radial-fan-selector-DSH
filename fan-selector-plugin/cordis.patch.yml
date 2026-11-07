@@ -1,0 +1,3 @@
+- insert:
+    - id: fan-selector
+      name: '@ruskykot/fan-selector'

@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "fan-selector-http": {
+      "transport": "streamable-http",
+      "url": "http://127.0.0.1:8000/mcp"
+    },
+    "fan-selector-stdio": {
+      "transport": "stdio",
+      "command": "python",
+      "args": ["mcp_stdio.py"],
+      "env": {}
+    }
+  }
+}

@@ -1,0 +1,332 @@
+[
+ {
+  "name": "63A6",
+  "n_kw": 0.18,
+  "n_rpm": 1000,
+  "i_nom": null
+ },
+ {
+  "name": "56B4",
+  "n_kw": 0.18,
+  "n_rpm": 1500,
+  "i_nom": null
+ },
+ {
+  "name": "63B6",
+  "n_kw": 0.25,
+  "n_rpm": 1000,
+  "i_nom": null
+ },
+ {
+  "name": "63A4",
+  "n_kw": 0.25,
+  "n_rpm": 1500,
+  "i_nom": null
+ },
+ {
+  "name": "71A6",
+  "n_kw": 0.37,
+  "n_rpm": 1000,
+  "i_nom": null
+ },
+ {
+  "name": "63B4",
+  "n_kw": 0.37,
+  "n_rpm": 1500,
+  "i_nom": null
+ },
+ {
+  "name": "63A2",
+  "n_kw": 0.37,
+  "n_rpm": 3000,
+  "i_nom": null
+ },
+ {
+  "name": "71B6",
+  "n_kw": 0.55,
+  "n_rpm": 1000,
+  "i_nom": null
+ },
+ {
+  "name": "71A4",
+  "n_kw": 0.55,
+  "n_rpm": 1500,
+  "i_nom": null
+ },
+ {
+  "name": "63B2",
+  "n_kw": 0.55,
+  "n_rpm": 3000,
+  "i_nom": null
+ },
+ {
+  "name": "80A6",
+  "n_kw": 0.75,
+  "n_rpm": 1000,
+  "i_nom": null
+ },
+ {
+  "name": "71B4",
+  "n_kw": 0.75,
+  "n_rpm": 1500,
+  "i_nom": null
+ },
+ {
+  "name": "71A2",
+  "n_kw": 0.75,
+  "n_rpm": 3000,
+  "i_nom": null
+ },
+ {
+  "name": "80B6",
+  "n_kw": 1.1,
+  "n_rpm": 1000,
+  "i_nom": null
+ },
+ {
+  "name": "80A4",
+  "n_kw": 1.1,
+  "n_rpm": 1500,
+  "i_nom": null
+ },
+ {
+  "name": "71B2",
+  "n_kw": 1.1,
+  "n_rpm": 3000,
+  "i_nom": null
+ },
+ {
+  "name": "100L8",
+  "n_kw": 1.5,
+  "n_rpm": 750,
+  "i_nom": null
+ },
+ {
+  "name": "90L6",
+  "n_kw": 1.5,
+  "n_rpm": 1000,
+  "i_nom": null
+ },
+ {
+  "name": "80B4",
+  "n_kw": 1.5,
+  "n_rpm": 1500,
+  "i_nom": null
+ },
+ {
+  "name": "80A2",
+  "n_kw": 1.5,
+  "n_rpm": 3000,
+  "i_nom": null
+ },
+ {
+  "name": "112MA8",
+  "n_kw": 2.2,
+  "n_rpm": 750,
+  "i_nom": null
+ },
+ {
+  "name": "100L6",
+  "n_kw": 2.2,
+  "n_rpm": 1000,
+  "i_nom": null
+ },
+ {
+  "name": "90L4",
+  "n_kw": 2.2,
+  "n_rpm": 1500,
+  "i_nom": null
+ },
+ {
+  "name": "80B2",
+  "n_kw": 2.2,
+  "n_rpm": 3000,
+  "i_nom": null
+ },
+ {
+  "name": "112MB8",
+  "n_kw": 3.0,
+  "n_rpm": 750,
+  "i_nom": null
+ },
+ {
+  "name": "112MA6",
+  "n_kw": 3.0,
+  "n_rpm": 1000,
+  "i_nom": null
+ },
+ {
+  "name": "100S4",
+  "n_kw": 3.0,
+  "n_rpm": 1500,
+  "i_nom": null
+ },
+ {
+  "name": "90L2",
+  "n_kw": 3.0,
+  "n_rpm": 3000,
+  "i_nom": null
+ },
+ {
+  "name": "132S8",
+  "n_kw": 4.0,
+  "n_rpm": 750,
+  "i_nom": null
+ },
+ {
+  "name": "112MB6",
+  "n_kw": 4.0,
+  "n_rpm": 1000,
+  "i_nom": null
+ },
+ {
+  "name": "100L4",
+  "n_kw": 4.0,
+  "n_rpm": 1500,
+  "i_nom": null
+ },
+ {
+  "name": "100S2",
+  "n_kw": 4.0,
+  "n_rpm": 3000,
+  "i_nom": null
+ },
+ {
+  "name": "132S6",
+  "n_kw": 5.5,
+  "n_rpm": 1000,
+  "i_nom": null
+ },
+ {
+  "name": "100L2",
+  "n_kw": 5.5,
+  "n_rpm": 3000,
+  "i_nom": null
+ },
+ {
+  "name": "160S8",
+  "n_kw": 7.5,
+  "n_rpm": 750,
+  "i_nom": null
+ },
+ {
+  "name": "132S4",
+  "n_kw": 7.5,
+  "n_rpm": 1500,
+  "i_nom": null
+ },
+ {
+  "name": "112M2",
+  "n_kw": 7.5,
+  "n_rpm": 3000,
+  "i_nom": null
+ },
+ {
+  "name": "160M8",
+  "n_kw": 11.0,
+  "n_rpm": 750,
+  "i_nom": null
+ },
+ {
+  "name": "160S6",
+  "n_kw": 11.0,
+  "n_rpm": 1000,
+  "i_nom": null
+ },
+ {
+  "name": "132M4",
+  "n_kw": 11.0,
+  "n_rpm": 1500,
+  "i_nom": null
+ },
+ {
+  "name": "180M8",
+  "n_kw": 15.0,
+  "n_rpm": 750,
+  "i_nom": null
+ },
+ {
+  "name": "160M6",
+  "n_kw": 15.0,
+  "n_rpm": 1000,
+  "i_nom": null
+ },
+ {
+  "name": "160S4",
+  "n_kw": 15.0,
+  "n_rpm": 1500,
+  "i_nom": null
+ },
+ {
+  "name": "200M8",
+  "n_kw": 18.5,
+  "n_rpm": 750,
+  "i_nom": null
+ },
+ {
+  "name": "180M6",
+  "n_kw": 18.5,
+  "n_rpm": 1000,
+  "i_nom": null
+ },
+ {
+  "name": "160M4",
+  "n_kw": 18.5,
+  "n_rpm": 1500,
+  "i_nom": null
+ },
+ {
+  "name": "200M6",
+  "n_kw": 22.0,
+  "n_rpm": 1000,
+  "i_nom": null
+ },
+ {
+  "name": "180S4",
+  "n_kw": 22.0,
+  "n_rpm": 1500,
+  "i_nom": null
+ },
+ {
+  "name": "225M8",
+  "n_kw": 30.0,
+  "n_rpm": 750,
+  "i_nom": null
+ },
+ {
+  "name": "200L6",
+  "n_kw": 30.0,
+  "n_rpm": 1000,
+  "i_nom": null
+ },
+ {
+  "name": "180M4",
+  "n_kw": 30.0,
+  "n_rpm": 1500,
+  "i_nom": null
+ },
+ {
+  "name": "250S8",
+  "n_kw": 37.0,
+  "n_rpm": 750,
+  "i_nom": null
+ },
+ {
+  "name": "250S6",
+  "n_kw": 45.0,
+  "n_rpm": 1000,
+  "i_nom": null
+ },
+ {
+  "name": "250M6",
+  "n_kw": 55.0,
+  "n_rpm": 1000,
+  "i_nom": null
+ },
+ {
+  "name": "280S6",
+  "n_kw": 75.0,
+  "n_rpm": 1000,
+  "i_nom": null
+ }
+]

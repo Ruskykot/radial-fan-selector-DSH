@@ -1,0 +1,17 @@
+fan-selector
+Copyright 2026 Ruskykot
+
+This project is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Reference data
+--------------
+The reference data in `select-radial-fan/data/*.json` (fan and impeller
+characteristics, motor and VFD catalogues, dimensions and mass) is compiled from
+manufacturer catalogues and technical documentation for engineering selection
+purposes. The copyrights in the original catalogues belong to their respective
+manufacturers. The data is provided "as is", without any warranty of accuracy or
+completeness, and is not a substitute for manufacturer documentation, official
+certificates or qualified engineering judgement.
+
+If you are a rights holder and believe a file should be removed, changed or
+attributed differently, please open an issue and it will be handled promptly.
