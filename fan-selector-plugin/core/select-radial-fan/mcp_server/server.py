@@ -1,10 +1,13 @@
-"""MCP-сервер подбора радиальных вентиляторов.
+"""Экспериментальный MCP-сервер подбора радиальных вентиляторов.
+
+ВНИМАНИЕ: экспериментальный MCP-слой: API и запуск могут меняться, поддержка не
+гарантирована.
 
 Тонкий адаптер над существующим ядром `fan_selector`: регистрирует функции из
 `mcp_server.tools` как типизированные инструменты (`select_fan`, `lookup_catalog`,
 `fan_chart`) и справочники как ресурсы `fan://data/*`. Ядро не меняется.
 
-Запуск (после `pip install "mcp[cli]"`, из корня пакета select-radial-fan):
+Запуск (после `pip install "mcp[cli]>=2.0"`, из корня пакета select-radial-fan):
     python -m mcp run mcp_server/server.py --transport stdio
     python -m mcp run mcp_server/server.py --transport streamable-http
 """

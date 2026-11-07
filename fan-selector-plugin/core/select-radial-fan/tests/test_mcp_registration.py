@@ -1,65 +1,70 @@
-"""Проверка регистрации инструментов/ресурсов MCP-сервера (без SDK `mcp`).
+"""Проверка регистрации инструментов/ресурсов MCP-сервера (реальный SDK `mcp`).
 
-Подменяет `mcp.server.MCPServer` заглушкой и проверяет, что `server.py` регистрирует
-ровно 3 инструмента и 5 ресурсов с ожидаемыми именами/URI. Логику самих инструментов
-проверяет tests/test_mcp.py; полный transport-тест требует `pip install "mcp[cli]"`.
+Импортирует настоящий `mcp_server.server` (без подмены `sys.modules` заглушкой) и
+проверяет, что зарегистрированы ровно 3 инструмента и 5 ресурсов с ожидаемыми
+именами/URI. Логику самих инструментов проверяет tests/test_mcp.py.
+
+Без установленного MCP SDK тест не падает и не «проходит» — он SKIP:
+`pip install -r requirements-mcp.txt` (или `pip install "mcp[cli]>=2.0"`).
 
 Запуск (из корня пакета select-radial-fan):
     python tests/test_mcp_registration.py
+    pytest tests/test_mcp_registration.py   # SKIP без SDK
 """
 from __future__ import annotations
 
 import sys
-import types
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-
-class _FakeMCPServer:
-    def __init__(self, name):
-        self.name = name
-        self.tools = []
-        self.resources = []
-
-    def tool(self):
-        def deco(fn):
-            self.tools.append(fn.__name__)
-            return fn
-        return deco
-
-    def resource(self, uri):
-        def deco(fn):
-            self.resources.append((uri, fn.__name__))
-            return fn
-        return deco
+# Имена и URI, которые сервер обязан зарегистрировать (сверено с
+# mcp_server/server.py: декораторы tool()/resource()).
+EXPECTED_TOOLS = ["fan_chart", "lookup_catalog", "select_fan"]
+EXPECTED_RESOURCES = [
+    "fan://data/catalog",
+    "fan://data/config",
+    "fan://data/fans",
+    "fan://data/impellers",
+    "fan://data/motors",
+]
 
 
-def _install_stub():
-    mcp = types.ModuleType("mcp")
-    mcp_server = types.ModuleType("mcp.server")
-    mcp_server.MCPServer = _FakeMCPServer
-    mcp.server = mcp_server
-    sys.modules["mcp"] = mcp
-    sys.modules["mcp.server"] = mcp_server
+def _skip_missing_sdk() -> None:
+    """Пропустить тест, если MCP SDK не установлен (SKIP, не PASS и не FAIL)."""
+    reason = "mcp SDK не установлен (pip install -r requirements-mcp.txt)"
+    try:
+        import pytest
+    except ImportError:
+        print("SKIP", reason)
+        raise SystemExit(0)
+    pytest.importorskip("mcp", reason=reason)
 
 
-_install_stub()
+_skip_missing_sdk()
+
 from mcp_server import server  # noqa: E402
 
 
 def test_server_registration():
+    """Сервер реально регистрирует ожидаемые инструменты и ресурсы."""
     assert server.mcp.name == "fan-selector"
-    assert sorted(server.mcp.tools) == ["fan_chart", "lookup_catalog", "select_fan"]
-    uris = sorted(uri for uri, _ in server.mcp.resources)
-    assert uris == [
-        "fan://data/catalog",
-        "fan://data/config",
-        "fan://data/fans",
-        "fan://data/impellers",
-        "fan://data/motors",
-    ]
+
+    tools = getattr(server.mcp, "tools", None)
+    assert tools is not None, "MCPServer не предоставляет список tools"
+    registered_tools = sorted(
+        t if isinstance(t, str) else getattr(t, "name", str(t)) for t in tools
+    )
+    assert registered_tools == EXPECTED_TOOLS, registered_tools
+
+    resources = getattr(server.mcp, "resources", None)
+    assert resources is not None, "MCPServer не предоставляет список resources"
+    uris = []
+    for r in resources:
+        uri = getattr(r, "uri", None) or (r[0] if isinstance(r, (tuple, list)) else None)
+        uris.append(str(uri))
+    assert sorted(uris) == EXPECTED_RESOURCES, uris
 
 
 if __name__ == "__main__":

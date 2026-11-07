@@ -26,7 +26,7 @@ dependencies = [
 
 [project.optional-dependencies]
 # mcp — опциональный слой API; SDK MCP требует Python >=3.11
-mcp = ["mcp>=1.0"]
+mcp = ["mcp[cli]>=2.0"]
 
 [project.urls]
 Homepage = "https://github.com/Ruskykot/radial-fan-selector-DSH"

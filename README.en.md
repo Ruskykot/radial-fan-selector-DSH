@@ -24,7 +24,7 @@ calculation runs in a separate Python core `fan_selector` (JSON in → JSON out)
 - Motor selection with a safety factor and a real variable-frequency drive.
 - P(Q) / η(Q) characteristic chart as a PNG right inside the panel.
 - Bulk selection from CSV (template + parse preview) and durable selection history.
-- MCP server and REST fallback for third-party clients.
+- MCP server and REST fallback for third-party clients (the MCP layer is experimental).
 
 ## Demo
 
@@ -135,7 +135,8 @@ python tests/test_rest.py
 
 - UI (optional standalone React widget, not used by the plugin):
   `cd web && pnpm install && pnpm dev` (build check — `pnpm build`).
-- MCP server: `python mcp_stdio.py streamable-http`.
+- MCP server: `python mcp_stdio.py streamable-http` (experimental: the API and the
+  launcher may change, support is not guaranteed).
 - REST fallback: `python run-rest.py 8100`.
 
 ## Plugin behaviour
