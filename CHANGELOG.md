@@ -62,7 +62,7 @@
 - Ядро `fan_selector` 2.4.0: `Pillow` объявлен явной зависимостью (нужен для PNG-графиков
   и импортируется транзитивно), `requires-python` приведён к `>=3.11`.
 - Упаковка: `data/*.json` теперь попадают в wheel (`setup.py` + `MANIFEST.in`),
-  поэтому `pip install ./select-radial-fan` даёт рабочий пакет; `DATA_DIR`
+  поэтому `pip install` ядра даёт рабочий пакет; `DATA_DIR`
   разрешается в `fan_selector/data/` (установка) или `data/` (репозиторий).
 - CI: зависимости ставятся из `requirements.txt`, добавлены smoke-тест установленного
   пакета, тесты REST/MCP-логики и сборка `web/`; Dependabot сгруппирован и не
