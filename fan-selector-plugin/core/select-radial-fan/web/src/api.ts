@@ -9,14 +9,23 @@ const MCP_URL: string =
 
 let clientPromise: Promise<Client> | null = null;
 
+function createClient(): Promise<Client> {
+  return (async () => {
+    const transport = new StreamableHTTPClientTransport(new URL(MCP_URL));
+    const client = new Client({ name: "fan-selector-web", version: "0.1.0" });
+    await client.connect(transport);
+    return client;
+  })();
+}
+
 async function getClient(): Promise<Client> {
   if (!clientPromise) {
-    clientPromise = (async () => {
-      const transport = new StreamableHTTPClientTransport(new URL(MCP_URL));
-      const client = new Client({ name: "fan-selector-web", version: "0.1.0" });
-      await client.connect(transport);
-      return client;
-    })();
+    // При ошибке кэш сбрасывается, чтобы следующий вызов переподключился
+    // (сервер мог быть ещё не запущен в момент первого запроса).
+    clientPromise = createClient().catch((err) => {
+      clientPromise = null;
+      throw err;
+    });
   }
   return clientPromise;
 }
