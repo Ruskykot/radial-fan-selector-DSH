@@ -57,10 +57,11 @@ python tests/test_rest.py
 
 ## Документация
 
-- [`docs/CALCULATION.md`](docs/CALCULATION.md) — как считается расчёт.
-- [`docs/DSH_INTEGRATION.md`](docs/DSH_INTEGRATION.md) — интеграция с DSH.
-- `docs/archive/MCP.md`, `docs/ARTIFACT_REACT.md`, `docs/SYNTHESIS.md`, `docs/VFD_TZ.md`,
-  `docs/archive/ARTIFACT_WASM.md` — дизайн-заметки (частично исторические).
+- [docs/CALCULATION.md](docs/CALCULATION.md) — как считается дроссельный расчёт.
+- [docs/CALCULATION_VFD.md](docs/CALCULATION_VFD.md) — как считается расчёт в режиме ЧРП.
+- [docs/DSH_INTEGRATION.md](docs/DSH_INTEGRATION.md) — интеграция с DSH.
+- `docs/archive/` — исторические дизайн-заметки (MCP.md, ARTIFACT_REACT.md,
+  SYNTHESIS.md, VFD_TZ.md, ARTIFACT_WASM.md, REDESIGN.md).
 
 ## Данные и лицензия
 

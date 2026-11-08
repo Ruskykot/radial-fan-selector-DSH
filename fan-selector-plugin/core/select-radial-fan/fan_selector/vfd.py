@@ -2,7 +2,8 @@
 
 Реализует режим подбора по частоте вращения по законам подобия
 (расход ∝ n, давление ∝ n², мощность ∝ n³) и подбор реального частотного
-преобразователя по параметрам подобранного двигателя. См. docs/VFD_TZ.md.
+преобразователя по параметрам подобранного двигателя. См. docs/CALCULATION_VFD.md
+(исходное ТЗ, по которому писался модуль, — docs/archive/VFD_TZ.md).
 
 Существующий модуль core.py (дроссельный режим) НЕ модифицируется.
 """
@@ -73,7 +74,7 @@ def network_intersection(fan: Fan, k: float, cfg: Config) -> Optional[float]:
 def select_vfd(motor: Optional[Motor], vfds: Sequence[Vfd], fan: Fan) -> Optional[Vfd]:
     """Подобрать ЧРП по параметрам двигателя.
 
-    Критерии (docs/VFD_TZ.md, п.6.1):
+    Критерии (docs/CALCULATION_VFD.md, п. 4.7; исходное ТЗ — docs/archive/VFD_TZ.md):
     1. u_in совпадает с напряжением двигателя (fan.voltage).
     2. p_kw ≥ мощности двигателя (motor.n_kw).
     3. i_nom_a ≥ номинального тока двигателя (если ток известен).

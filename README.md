@@ -251,6 +251,8 @@ sequenceDiagram
 - КПД по подобию (смещение точки по расходу), мощность на валу с запасом;
 - двигатель подбирается по номинальной частоте, затем ЧРП по `p_kw` / `i_nom_a`.
 
+Подробности — [`fan-selector-plugin/core/select-radial-fan/docs/CALCULATION_VFD.md`](fan-selector-plugin/core/select-radial-fan/docs/CALCULATION_VFD.md).
+
 ### 3. Сравнение (COMPARE)
 
 Один запрос — два расчёта (`THROTTLE` и `VFD`) для одной точки плюс общий
@@ -315,7 +317,8 @@ fan_selector/
    `n_kw ≥ N_расч`, минимальная достаточная.
 7. Оценить шум корпуса и отсортировать по `Δрег`.
 
-Подробности — [`fan-selector-plugin/core/select-radial-fan/docs/CALCULATION.md`](fan-selector-plugin/core/select-radial-fan/docs/CALCULATION.md).
+Дроссельный режим — [`fan-selector-plugin/core/select-radial-fan/docs/CALCULATION.md`](fan-selector-plugin/core/select-radial-fan/docs/CALCULATION.md).
+Частотный режим (ЧРП) — [`fan-selector-plugin/core/select-radial-fan/docs/CALCULATION_VFD.md`](fan-selector-plugin/core/select-radial-fan/docs/CALCULATION_VFD.md).
 
 ### Контракт результата (`fan-result/v1`)
 

@@ -187,7 +187,7 @@ select-radial-fan/
 │   ├── ...                 # ядро — НЕ менять
 │   └── mcp.py              # НОВЫЙ тонкий адаптер (~50 строк)
 ├── pyproject.toml          # + optional-dependency: mcp
-├── docs/MCP.md             # этот документ
+├── docs/archive/MCP.md     # этот документ
 └── tests/test_mcp.py       # НОВЫЙ smoke-тест через MCP-клиент
 ```
 

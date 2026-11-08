@@ -4,6 +4,18 @@
 
 ## [Unreleased]
 
+### Added
+- Документ [`docs/CALCULATION_VFD.md`](fan-selector-plugin/core/select-radial-fan/docs/CALCULATION_VFD.md) —
+  описание расчёта в режиме частотного регулирования (ЧРП): законы подобия,
+  поиск требуемой частоты, КПД по подобию, подбор двигателя и частотного
+  преобразователя, эталонный расчёт. Ссылки на него добавлены в `README.md` и
+  `README.en.md`.
+
+### Changed
+- Дизайн-заметки `ARTIFACT_REACT.md`, `SYNTHESIS.md` и `VFD_TZ.md` перенесены в
+  `docs/archive/`: относительные ссылки внутри архива и ссылки в документации
+  обновлены, актуальное описание расчёта ЧРП — `docs/CALCULATION_VFD.md`.
+
 ### Fixed
 - Документация по установке: описана ловушка с оставшимся каталогом-ссылкой от
   прежней установки через `link:` (`ERR_PNPM_EPERM: rename …_tmp_… → …fan-selector`,

@@ -250,6 +250,8 @@ regulation reserve (more energy-efficient).
 - efficiency by similarity (shifted along flow), shaft power with safety factor;
 - the motor is selected at nominal speed, then a VFD by `p_kw` / `i_nom_a`.
 
+Details — [`fan-selector-plugin/core/select-radial-fan/docs/CALCULATION_VFD.md`](fan-selector-plugin/core/select-radial-fan/docs/CALCULATION_VFD.md).
+
 ### 3. Comparison (COMPARE)
 
 One request runs two calculations (`THROTTLE` and `VFD`) for the same point and
@@ -313,7 +315,8 @@ fan_selector/
    `n_kw ≥ N_calc`, the smallest sufficient one.
 7. Estimate casing noise and sort by `Δreg`.
 
-Details — [`fan-selector-plugin/core/select-radial-fan/docs/CALCULATION.md`](fan-selector-plugin/core/select-radial-fan/docs/CALCULATION.md).
+Throttle mode — [`fan-selector-plugin/core/select-radial-fan/docs/CALCULATION.md`](fan-selector-plugin/core/select-radial-fan/docs/CALCULATION.md).
+Frequency mode (VFD) — [`fan-selector-plugin/core/select-radial-fan/docs/CALCULATION_VFD.md`](fan-selector-plugin/core/select-radial-fan/docs/CALCULATION_VFD.md).
 
 ### Result contract (`fan-result/v1`)
 
