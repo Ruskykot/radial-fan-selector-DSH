@@ -121,6 +121,11 @@ rolled back. Remove the link itself (not the checkout contents) and retry:
 cmd /c rmdir "%USERPROFILE%\.dsh\profiles\<profile>\node_modules\@rusky_kot\fan-selector"
 ```
 
+When that link pointed at a working checkout, the install may have deleted a few of
+its files — restore them from git: `git checkout -- .` (then check `git status`).
+Removing the `link:` dependency first and installing the registry version afterwards
+is the safer order.
+
 **The plugin is installed but the panel is missing.** Make sure the name is listed
 in the profile's `dsh.profile.bundles` (see step 2). `dsh plugin … add` only adds
 the dependency; the bundle is enabled by the DSH interface when you install the
