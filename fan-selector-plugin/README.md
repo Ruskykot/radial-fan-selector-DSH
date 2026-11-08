@@ -26,6 +26,12 @@ dsh plugin --profile <профиль> add @rusky_kot/fan-selector
 Клонировать репозиторий и устанавливать ядро через `pip` не нужно — оно уже в
 пакете. Если `python` не в `PATH`, задайте путь переменной `FAN_SELECTOR_PYTHON`.
 
+> Если при установке появляется `ERR_PNPM_EPERM: rename …fan-selector_tmp_… → …fan-selector`
+> или предупреждение про `node_modules\.ignored\…`, в профиле остался junction от
+> прежней установки через `link:`. Удалите ссылку и повторите:
+> `cmd /c rmdir "%USERPROFILE%\.dsh\profiles\<профиль>\node_modules\@rusky_kot\fan-selector"`.
+> Подробнее — в разделе «Устранение неполадок установки» README репозитория.
+
 ## Режимы
 
 - дроссельное регулирование (THROTTLE);

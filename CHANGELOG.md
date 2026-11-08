@@ -2,6 +2,15 @@
 
 Формат — [Keep a Changelog](https://keepachangelog.com/), версии — SemVer.
 
+## [Unreleased]
+
+### Fixed
+- Документация по установке: описана ловушка с оставшимся каталогом-ссылкой от
+  прежней установки через `link:` (`ERR_PNPM_EPERM: rename …_tmp_… → …fan-selector`,
+  предупреждение про `node_modules\.ignored\…`) и способ её устранения; отмечено,
+  что `dsh plugin … add` добавляет только зависимость, а бандл включается
+  интерфейсом DSH (запись в `dsh.profile.bundles`).
+
 ## [1.0.0] - 2026-11-07
 
 Первая публикация плагина в npm:

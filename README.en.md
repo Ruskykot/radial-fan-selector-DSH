@@ -107,6 +107,25 @@ After the restart the “Fan selection” panel appears, and the agent gets the
 If Python or the libraries are missing, the panel shows a clear error with the
 install command, and the API returns the `ENV` code.
 
+### Installation troubleshooting
+
+**`ERR_PNPM_EPERM: rename '…\@rusky_kot\fan-selector_tmp_<pid>_1' -> '…\@rusky_kot\fan-selector'`**,
+or the warning `[WARN] Moving @rusky_kot/fan-selector_tmp_… to "node_modules\.ignored\…"`.
+The profile still holds a directory junction left by an earlier `link:` install —
+for example when the plugin used to be linked straight from a repository checkout.
+On Windows pnpm cannot rename a new directory over a junction, so the operation is
+rolled back. Remove the link itself (not the checkout contents) and retry:
+
+```powershell
+# rmdir removes only the link; the project directory stays untouched
+cmd /c rmdir "%USERPROFILE%\.dsh\profiles\<profile>\node_modules\@rusky_kot\fan-selector"
+```
+
+**The plugin is installed but the panel is missing.** Make sure the name is listed
+in the profile's `dsh.profile.bundles` (see step 2). `dsh plugin … add` only adds
+the dependency; the bundle is enabled by the DSH interface when you install the
+plugin.
+
 ## Development
 
 ```bash
